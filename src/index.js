@@ -1,12 +1,15 @@
 const LumberjackClient = require('lumberjack-client');
 const os = require('os');
 
+console.log('New Client...')
 const client = new LumberjackClient({
-  // host: 'localhost',
-  host: '192.168.0.223',
+  host: 'localhost',
+  // host: '192.168.0.223',
   port: 5044,
-})
+}, true)
 
+
+console.log('Log...')
 client.log(
   {
     '@timestamp': new Date(),
@@ -20,3 +23,5 @@ client.log(
     message: 'hello world',
   }
 )
+
+console.log('Done.')
