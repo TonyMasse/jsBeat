@@ -109,7 +109,7 @@ console.log(inputs);
 // Setting up Heatbeat
 var heartBeatInterval = setInterval(function () {
   console.log('💖 - Heartbeat');
-  logMessage('Heartbeat', 'Heartbeat', {
+  logMessage('Heartbeat - 💖', 'Heartbeat', {
     heartbeat: true
   })
 }, 60000);
