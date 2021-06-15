@@ -18,7 +18,7 @@ function logMessage (message, deviceType, filterHelpers) {
   // filterHelpers is an optional Object used by the Open Collector filter to include or exclude the message (for example: { filter_abc: true, filter_xyz: false } )
 
   if (message) {
-    console.log('🌠');
+    // console.log('🌠');
     client.log(
       {
         '@timestamp': new Date(),
