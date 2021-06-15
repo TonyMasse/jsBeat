@@ -5,6 +5,12 @@ const { FlatFileReader } = require('./inputs/flatFile');
 const fs = require('fs');
 const path = require('path');
 
+// Log that we are starting
+logMessage('Beat Started', 'Heartbeat', {
+  heartbeat: true,
+  activity: 'Starting'
+})
+
 
 // Get command line params
 const commandArgs = process.argv.slice(2);
@@ -99,3 +105,14 @@ if (commandArgs && commandArgs[0] && commandArgs[0].length) {
 
 console.log('Input:');
 console.log(inputs);
+
+// Setting up Heatbeat
+var heartBeatInterval = setInterval(function () {
+  console.log('💖 - Heartbeat');
+  logMessage('Heartbeat', 'Heartbeat', {
+    heartbeat: true
+  })
+}, 60000);
+
+// Not sure why we would need to clean it
+// clearInterval(heartBeatInterval);
