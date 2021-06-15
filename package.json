@@ -11,6 +11,7 @@
   "author": "Tony Masse",
   "license": "MIT",
   "dependencies": {
-    "lumberjack-client": "^1.0.3"
+    "lumberjack-client": "^1.0.3",
+    "tail": "^2.2.2"
   }
 }
