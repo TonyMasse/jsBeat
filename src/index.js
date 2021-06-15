@@ -1,6 +1,10 @@
 // Load the logMessage function to push messages via Lumberjack to Open Collector
 const { logMessage } = require('./outputs/logMessage');
 const { FlatFileReader } = require('./inputs/flatFile');
+// To read config files
+const fs = require('fs');
+const path = require('path');
+
 
 // Get command line params
 const commandArgs = process.argv.slice(2);
@@ -25,6 +29,51 @@ const commandArgs = process.argv.slice(2);
 const inputs = [];
 const outputs = [];
 
+// Get Inputs config
+const inputConfig = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config', 'log_sources.json'), 'utf8'));
+
+// Build Inputs from config
+if (inputConfig && Array.isArray(inputConfig)) {
+  inputConfig.forEach((input) => {
+    if (input.log_source_type) {
+      const logSourceTypeLowerCase = String(input.log_source_type).toLowerCase()
+
+      // Flat File
+      if (logSourceTypeLowerCase === 'flatfile') {
+        if (input.filePath && input.filePath.length) {
+          const deviceType = (input.device_type && input.device_type.length ? input.device_type : undefined)
+          inputs.push(
+            {
+              type: 'flatFile',
+              name: deviceType || input.filePath,
+              handler: new FlatFileReader({
+                path: input.filePath,
+                autoStart: true,
+                printToConsole: input.printToConsole || input.printOnlyToConsole,
+                sendToOpenCollector: !(input.printOnlyToConsole === true),
+                deviceType,
+                filterHelpers: {
+                  flatFile: true,
+                  filePath: input.filePath,
+                  logSourceType: 'Flat File'
+                }
+              },
+              logMessage)
+            }
+          )
+        } else {
+          console.log('WARNING: Flat File Log Source definition is missing filePath. Skipping.');
+        }
+      } // Flat File
+
+    } else {
+      console.log('WARNING: Log Source definition is missing log_source_type. Skipping.');
+    }
+  })
+} else {
+  console.log('ERROR: log_sources.json must contain an array of Log Source definitions.');
+}
+
 if (commandArgs && commandArgs[0] && commandArgs[0].length) {
   console.log('Tailing: ' + commandArgs[0] + '...');
 
@@ -47,3 +96,6 @@ if (commandArgs && commandArgs[0] && commandArgs[0].length) {
     logMessage)
   });
 }
+
+console.log('Input:');
+console.log(inputs);

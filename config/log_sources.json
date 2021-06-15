@@ -1,6 +1,15 @@
 [
   {
-    "log_source_type": "",
+    "log_source_type": "flatFile",
+    "device_type": "system_messages",
+    "filter_helpers": {
+      "System_Messages": true
+    },
+    "filePath": "/var/log/messages",
+    "printToConsole": true
+  },
+  {
+    "log_source_type": "N/A",
     "device_type": "",
     "filter_helpers": {},
     "frequency_in_seconds": 120,
