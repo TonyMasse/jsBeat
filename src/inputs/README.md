@@ -15,7 +15,6 @@
     - [ ] update State
   - [ ] after each crawl cycle:
     - [ ] persist State to disk
-    - [ ] set timer for next Crawl
   - [ ] limit crawl to specific depths (from config)
   - [ ] crawl interval set by config
 - [ ] regularly
@@ -29,3 +28,23 @@
   - [ ] Start Regex
   - [ ] End Regex
   - [ ] Separator Regex
+
+### Configuration
+- Base directory path
+- Multi-lines log
+  - Start Regex
+  - End Regex
+  - Separator / Delimiter Regex
+- ~~Is directory~~
+- Recursion depth
+- Inclusions
+- Exclusions
+- Days to watch modified files
+- Compression type
+  - none
+  - gzip
+  - tar
+  - targzip
+  - zip
+  - gzip (partitionned file)
+- Crawl frequency (seconds)

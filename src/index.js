@@ -1,6 +1,8 @@
 // Load the logMessage function to push messages via Lumberjack to Open Collector
 const { logMessage } = require('./outputs/logMessage');
 const { FlatFileReaderTail } = require('./inputs/flatFileTail');
+const { FlatFileReader } = require('./inputs/flatFile');
+
 // To read config files
 const fs = require('fs');
 const path = require('path');
@@ -46,21 +48,32 @@ if (inputConfig && Array.isArray(inputConfig)) {
 
       // Flat File
       if (logSourceTypeLowerCase === 'flatfile') {
-        if (input.filePath && input.filePath.length) {
+        if (input.baseDirectoryPath && input.baseDirectoryPath.length) {
           const deviceType = (input.device_type && input.device_type.length ? input.device_type : undefined)
           inputs.push(
             {
               type: 'flatFile',
-              name: deviceType || input.filePath,
-              handler: new FlatFileReaderTail({
-                path: input.filePath,
+              name: deviceType || input.baseDirectoryPath,
+              // handler: new FlatFileReaderTail({
+              handler: new FlatFileReader({
+                path: input.baseDirectoryPath, // Backward compatibility with FlatFileReaderTail
+                baseDirectoryPath: input.baseDirectoryPath, // Going forward, with FlatFileReader
+                inclusionFilter: input.inclusionFilter,
+                exclusionFilter: input.exclusionFilter,
+                recursionDepth: input.recursionDepth,
+                daysToWatchModifiedFiles: input.daysToWatchModifiedFiles,
+                compressionType: input.compressionType,
+                multiLines: input.multiLines,
+                frequency_in_seconds: input.frequency_in_seconds,
+
                 autoStart: true,
                 printToConsole: input.printToConsole || input.printOnlyToConsole,
                 sendToOpenCollector: !(input.printOnlyToConsole === true),
                 deviceType,
                 filterHelpers: {
+                  ...input.filter_helpers,
                   flatFile: true,
-                  filePath: input.filePath,
+                  filePath: input.baseDirectoryPath,
                   logSourceType: 'Flat File'
                 }
               },
@@ -68,7 +81,7 @@ if (inputConfig && Array.isArray(inputConfig)) {
             }
           )
         } else {
-          console.log('WARNING: Flat File Log Source definition is missing filePath. Skipping.');
+          console.log('WARNING: Flat File Log Source definition is missing baseDirectoryPath. Skipping.');
         }
       } // Flat File
 
@@ -89,7 +102,8 @@ if (commandArgs && commandArgs[0] && commandArgs[0].length) {
     type: 'flatFile',
     name: deviceType || commandArgs[0],
     handler: new FlatFileReaderTail({
-      path: commandArgs[0],
+      path: commandArgs[0], // Backward compatibility with FlatFileReaderTail
+      baseDirectoryPath: commandArgs[0], // Going forward, with FlatFileReader
       autoStart: true,
       printToConsole: true,
       deviceType,
