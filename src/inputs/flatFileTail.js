@@ -1,8 +1,7 @@
 'use strict';
+const Tail = require('tail').Tail;
 
-// This version is to use the home made algo, as the Tail is too simplistic
-
-class FlatFileReader {
+class FlatFileReaderTail {
 
   constructor(config, loggerFunction) {
     // config: object containing these params:
@@ -48,13 +47,13 @@ class FlatFileReader {
     if (this.config.path && this.config.path.length) {
       if (this.loggerFunction && typeof this.loggerFunction === 'function') {
         try {
-          // this.tail = new Tail(this.config.path);
+          this.tail = new Tail(this.config.path);
 
-          // this.tail.on("line", this.onTailLineEvent.bind(this));
+          this.tail.on("line", this.onTailLineEvent.bind(this));
 
-          // this.tail.on("error", function (error) {
-          //   console.log('ERROR: ', error);
-          // });
+          this.tail.on("error", function (error) {
+            console.log('ERROR: ', error);
+          });
 
         } catch (err) {
           console.error(err);
@@ -90,5 +89,5 @@ class FlatFileReader {
 
 
 module.exports = {
-  FlatFileReader
+  FlatFileReaderTail
 };

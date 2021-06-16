@@ -1,6 +1,6 @@
 // Load the logMessage function to push messages via Lumberjack to Open Collector
 const { logMessage } = require('./outputs/logMessage');
-const { FlatFileReader } = require('./inputs/flatFile');
+const { FlatFileReaderTail } = require('./inputs/flatFileTail');
 // To read config files
 const fs = require('fs');
 const path = require('path');
@@ -52,7 +52,7 @@ if (inputConfig && Array.isArray(inputConfig)) {
             {
               type: 'flatFile',
               name: deviceType || input.filePath,
-              handler: new FlatFileReader({
+              handler: new FlatFileReaderTail({
                 path: input.filePath,
                 autoStart: true,
                 printToConsole: input.printToConsole || input.printOnlyToConsole,
@@ -88,7 +88,7 @@ if (commandArgs && commandArgs[0] && commandArgs[0].length) {
   inputs.push({
     type: 'flatFile',
     name: deviceType || commandArgs[0],
-    handler: new FlatFileReader({
+    handler: new FlatFileReaderTail({
       path: commandArgs[0],
       autoStart: true,
       printToConsole: true,
