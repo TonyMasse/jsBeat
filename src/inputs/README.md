@@ -1,22 +1,29 @@
-# Flat file collection
+# Inputs
 
-### Algo:
+## Flat file collection
+
+### Crawler process:
 - [ ] Crawl the path for files matching criteria
-  - [ ] Check existence of root path
-    - [ ] If not present, set timer to check later
+  - [x] Check existence of root path
+    - [x] If not present, set timer to check later
   - [ ] for each file:
-    - [ ] add new file to State
-    - [ ] read any new file
-      - [ ] collect from byte 0
-    - [ ] read any changed file
-      - [ ] use file size to trigger collect
-        - [ ] if bigger: collect from last collected byte +1
-        - [ ] if smaller: collect from byte 0
-    - [ ] update State
+    - [x] check include Filter for match
+    - [x] check exclude Filter for NO match
+    - [x] add new file to State
+    - [x] read any new file
+      - [x] collect from byte 0
+    - [x] read any changed file
+      - [x] use file size to trigger collect
+        - [x] if bigger: collect from last collected byte +1
+        - [x] if smaller: collect from byte 0
+    - [x] update State
+  - [x] for each directory:
+    - [x] Recursively crawl said directory
+    - [x] Do not recursively crawl if reached maximum depth
   - [ ] after each crawl cycle:
     - [ ] persist State to disk
-  - [ ] limit crawl to specific depths (from config)
-  - [ ] crawl interval set by config
+  - [x] limit crawl to specific depths (from config)
+  - [x] crawl interval set by config
 - [ ] regularly
   - [ ] prune State
     - [ ] low frequency (daily?)
@@ -28,6 +35,8 @@
   - [ ] Start Regex
   - [ ] End Regex
   - [ ] Separator Regex
+- [ ] for each message
+  - [ ] push to Open Collector
 
 ### Configuration
 - Base directory path
