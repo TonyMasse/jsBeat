@@ -317,7 +317,11 @@ function crawl(directory, depth) {
 function collectMessagesFromFile(fileFullPath, fromByte, toByte) {
   if (fileFullPath && fileFullPath.length && fromByte >= 0 && toByte > fromByte) {
     console.log('🚀 - collectMessagesFromFile "' + fileFullPath + '" from Byte: ' + fromByte + ' to Byte: ' + toByte);
-    console.log(this.config.compressionType);
+    if (this.config.compressionType && this.config.compressionType.length) {
+      // Handle decompression
+    }
+    // fs.readSync
+
   }
   //
 }
