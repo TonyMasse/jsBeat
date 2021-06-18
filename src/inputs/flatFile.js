@@ -294,6 +294,9 @@ function crawl(directory, depth) {
       return;
     }
 
+    // Prep oldestAllowedFileTimeStamp to later on check if each file it is more recent than the "daysToWatchModifiedFiles" limit
+    const oldestAllowedFileTimeStamp = Date.now() - this.config.daysToWatchModifiedFiles * 86000000
+
     // Double check we are actually dealing with a directory
     let dirStats = fs.statSync(directory);
     if (dirStats.isDirectory()) {
@@ -316,38 +319,43 @@ function crawl(directory, depth) {
               this.statistics.directoriesSkipped++
             }
           } else if (entryStats.isFile()) {
-            // Check if file matches the inclusing Regex
-            if (String(entry).match(this.config.inclusionFilterRegex)) {
-              // And if it does't our exclusion Regex
-              if (!this.config.exclusionFilterRegex || (this.config.exclusionFilterRegex && !String(entry).match(this.config.exclusionFilterRegex))) {
-                // console.log('🦔 - processing: ' + entry);
-                this.statistics.filesDetected++;
-                const previousStats = this.state.positions.get(entryFullPath)
-                if (previousStats) {
-                  // Existing File
-                  // Compare the Stats
-                  if (entryStats.size > previousStats.size) {
-                    // The file grew since last check
-                    // Let's gather new data
-                    console.log('🦔 - 🟩 - File grew');
-                    collectMessagesFromFile.call(this, entryFullPath, previousStats.size, entryStats.size);
-                  } else if (entryStats.size < previousStats.size) {
-                    // Size shrunk, indicating a fresh new content
-                    // Let's gather full file content
-                    console.log('🦔 - 🟦 - New content');
-                    collectMessagesFromFile.call(this, entryFullPath, 0, entryStats.size);
+            // Check the file is more recent than the "daysToWatchModifiedFiles" limit
+            if (!this.config.daysToWatchModifiedFiles || ((this.config.daysToWatchModifiedFiles > 0) && (entryStats.mtimeMs > oldestAllowedFileTimeStamp))) { // Days to watch modified files
+              // Check if file matches the inclusing Regex
+              if (String(entry).match(this.config.inclusionFilterRegex)) {
+                // And if it does't our exclusion Regex
+                if (!this.config.exclusionFilterRegex || (this.config.exclusionFilterRegex && !String(entry).match(this.config.exclusionFilterRegex))) {
+                  // console.log('🦔 - processing: ' + entry);
+                  this.statistics.filesDetected++;
+                  const previousStats = this.state.positions.get(entryFullPath)
+                  if (previousStats) {
+                    // Existing File
+                    // Compare the Stats
+                    if (entryStats.size > previousStats.size) {
+                      // The file grew since last check
+                      // Let's gather new data
+                      console.log('🦔 - 🟩 - File grew (' + entryFullPath + ')');
+                      collectMessagesFromFile.call(this, entryFullPath, previousStats.size, entryStats.size);
+                    } else if (entryStats.size < previousStats.size) {
+                      // Size shrunk, indicating a fresh new content
+                      // Let's gather full file content
+                      console.log('🦔 - 🟦 - New content (' + entryFullPath + ')');
+                      collectMessagesFromFile.call(this, entryFullPath, 0, entryStats.size);
+                    } else {
+                      console.log('🦔 - ⬛ - Same file (' + entryFullPath + ')');
+                    }
+                    this.state.positions.set(entryFullPath, entryStats)
                   } else {
-                    console.log('🦔 - ⬛ - Same file');
+                    // New file
+                    this.state.positions.set(entryFullPath, entryStats)
+                    // Let's gather full file content
+                    console.log('🦔 - 🆕 - New file (' + entryFullPath + ')');
+                    collectMessagesFromFile.call(this, entryFullPath, 0, entryStats.size);
                   }
-                  this.state.positions.set(entryFullPath, entryStats)
-                } else {
-                  // New file
-                  this.state.positions.set(entryFullPath, entryStats)
-                  // Let's gather full file content
-                  console.log('🦔 - 🆕 - New file');
-                  collectMessagesFromFile.call(this, entryFullPath, 0, entryStats.size);
                 }
               }
+            } else {
+              // console.log('🦔 - 👴 - File is too old. Skipping. (' + entryFullPath + ')');
             }
           }
 

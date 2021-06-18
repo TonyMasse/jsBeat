@@ -23,7 +23,7 @@
     "printToConsole": false
   },
   {
-    "log_source_type": "flatFile",
+    "log_source_type": "flatFile ** DISABLED",
     "uid": "bogguse69-5c1b-4d8f-8144-7d51c765f1ee",
     "name": "Fake Firewalld logs - WILL FAIL as we are providing a file instead of a directory under baseDirectoryPath",
     "device_type": "test_firewalld",
@@ -58,7 +58,7 @@
     "inclusionFilter": "firewalld",
     "exclusionFilter": "",
     "recursionDepth": 0,
-    "daysToWatchModifiedFiles": 0,
+    "daysToWatchModifiedFiles": 1,
     "compressionType": "none",
     "multiLines": {
       "msgStartRegex": "",
