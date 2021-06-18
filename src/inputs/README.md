@@ -4,12 +4,17 @@
 
 ### Crawler process:
 - [ ] Crawl the path for files matching criteria
+  - [ ] Check existence of State file for Log Source
+    - [ ] read State from disk
   - [x] Check existence of root path
     - [x] If not present, set timer to check later
+  - [ ] Check if root path is File, in case user misunderstood and/or mis-configured it as a file instead of directory
+    - [ ] If it is, process it as a file directly
   - [ ] for each file:
     - [x] check include Filter for match
     - [x] check exclude Filter for NO match
     - [x] add new file to State
+      - [ ] unless they are older than `Days to watch modified files`
     - [x] read any new file
       - [x] collect from byte 0
     - [x] read any changed file
@@ -39,15 +44,15 @@
   - [x] push to Open Collector
 
 ### Configuration
-- Base directory path
+- Base directory path (👈 Compulsory)
+- Inclusions (👈 Compulsory)
+- Exclusions
 - Multi-lines log
   - Start Regex
   - End Regex
   - Separator / Delimiter Regex
-- ~~Is directory~~
+- ~~Is directory~~ (👈 decided to make it a directory all the time by default)
 - Recursion depth
-- Inclusions
-- Exclusions
 - Days to watch modified files
 - Compression type
   - none
