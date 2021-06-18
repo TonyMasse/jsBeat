@@ -4,8 +4,8 @@
 
 ### Crawler process:
 - [ ] Crawl the path for files matching criteria
-  - [+] Check existence of State file for Log Source
-    - [+] read State from disk
+  - [x] Check existence of State file for Log Source
+    - [x] read State from disk
   - [x] Check existence of root path
     - [x] If not present, set timer to check later
   - [ ] ~~Check if root path is File, in case user misunderstood and/or mis-configured it as a file instead of directory~~
