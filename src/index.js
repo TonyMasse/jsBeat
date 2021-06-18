@@ -58,7 +58,7 @@ if (inputConfig && Array.isArray(inputConfig)) {
                   uid: input.uid,
                   path: input.baseDirectoryPath, // Backward compatibility with FlatFileReaderTail
                   baseDirectoryPath: input.baseDirectoryPath, // Going forward, with FlatFileReader
-                  inclusionFilter: input.inclusionFilter,
+                  inclusionFilter: input.inclusionFilter || '*',
                   exclusionFilter: input.exclusionFilter,
                   recursionDepth: input.recursionDepth,
                   daysToWatchModifiedFiles: input.daysToWatchModifiedFiles,
