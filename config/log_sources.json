@@ -24,6 +24,29 @@
   },
   {
     "log_source_type": "flatFile",
+    "uid": "bogguse69-5c1b-4d8f-8144-7d51c765f1ee",
+    "name": "Fake Firewalld logs - WILL FAIL as we are providing a file instead of a directory under baseDirectoryPath",
+    "device_type": "test_firewalld",
+    "filter_helpers": {
+      "boggus_test_file": true,
+      "firewalld": true
+    },
+    "baseDirectoryPath": "/tmp/firewalld",
+    "inclusionFilter": "",
+    "exclusionFilter": "",
+    "recursionDepth": 0,
+    "daysToWatchModifiedFiles": 0,
+    "compressionType": "none",
+    "multiLines": {
+      "msgStartRegex": "",
+      "msgStopRegex": "",
+      "msgDelimiterRegex": ""
+    },
+    "frequency_in_seconds": 5,
+    "printToConsole": false
+  },
+  {
+    "log_source_type": "flatFile",
     "uid": "ef480e69-5c1b-4d8f-8144-7d51c765f1ee",
     "name": "Fake Firewalld logs",
     "device_type": "test_firewalld",
