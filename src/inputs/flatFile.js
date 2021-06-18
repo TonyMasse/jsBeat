@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('fs-extra')
 const path = require('path')
+const uuid = require('uuid-random');
 
 // This version is to use the home made algo, as the Tail is too simplistic
 // See README.md for details and progress
@@ -9,6 +10,8 @@ class FlatFileReader {
 
   constructor(config, loggerFunction) {
     // config: object containing these params:
+    // - uid: string. UID of the Log Source / data stream. If none provided, one will be generated.
+    // - name: string. Optional user friendly name for the Log Source / data stream.
     // - baseDirectoryPath: string. Full Base directory path to crawl to find the files matching inclusionFilter. Must be non-empty.
     // - inclusionFilter: string. If prefixed with "Regex::" then regex filter, otherwise file system type filter. Must be non-empty.
     // - exclusionFilter: string. If prefixed with "Regex::" then regex filter, otherwise file system type filter.
@@ -33,7 +36,8 @@ class FlatFileReader {
         currentCollectionCycleStartedAt: 0,
         stillPruningState: false, // Are we still Pruning?
         currentPruningStateStartedAt: 0,
-        positions: new Map() // File position and other stats
+        positions: new Map(), // File position and other stats
+        fullStateFilePath: '' // Is defined a few lines of code further, as it requires a valid UID
       },
       statistics: {
         directoriesScanned: 0, // Directories we crawled into
@@ -51,22 +55,30 @@ class FlatFileReader {
       pruningStateInterval: null // ID of the Pruning State job set by setInterval
     })
 
+    // Create a UID if none provided
+    if ((this.config.uid === undefined) || (this.config.uid && !this.config.uid.length)) {
+      this.config.uid = uuid();
+    }
+
     // Set frequency_in_seconds to 30 seconds by default
     if (!this.config.frequency_in_seconds || (this.config.frequency_in_seconds && this.config.frequency_in_seconds <= 0)) {
-      this.config.frequency_in_seconds = 30
+      this.config.frequency_in_seconds = 30;
     }
 
     // Set recursionDepth to 5 by default
     if ((this.config.recursionDepth === undefined) || (this.config.recursionDepth && this.config.recursionDepth < 0)) {
-      this.config.recursionDepth = 5
+      this.config.recursionDepth = 5;
     }
+
+    // Prep State file path
+    this.state.fullStateFilePath = path.join(process.env.PWD, 'states', 'state.' + this.config.uid + '.json');
 
     // Call use() to add the loggerFunction if already provided
     if (loggerFunction) {
       this.use(loggerFunction);
     }
 
-    // Annd kick it all off, if set to autoStart
+    // And kick it all off, if set to autoStart
     if (config.autoStart !== false) {
       this.start();
     }
@@ -87,94 +99,102 @@ class FlatFileReader {
   } // use
 
   start () {
-    if (this.config.baseDirectoryPath && this.config.baseDirectoryPath.length) {
-      if (this.config.inclusionFilter && this.config.inclusionFilter.length) {
-        // Prepare inclusion and exclusion filters Regexes
-        if (String(this.config.inclusionFilter).startsWith('Regex::')) {
-          // Strip "Regex::" out
-          this.config.inclusionFilterRegex = this.config.inclusionFilter.substring(7);
-        } else {
-          // Transform File System style filter to Regex
-          this.config.inclusionFilterRegex = String(this.config.inclusionFilter)
-            .replace(/\./g, '\\.') // Escape dots
-            .replace(/\?/g, '.') // A single char
-            .replace(/\*/g, '.*') // Anything
-
-          if (!String(this.config.inclusionFilterRegex).startsWith('^')) {
-            this.config.inclusionFilterRegex = '^' + this.config.inclusionFilterRegex
-          }
-          if (!String(this.config.inclusionFilterRegex).endsWith('$')) {
-            this.config.inclusionFilterRegex = this.config.inclusionFilterRegex + '$'
-          }
-
-          // So:
-          // *.txt => ^.*\.txt$
-          // log_file.* => ^log_file\..*$
-          // log_file_num_???.log => ^log_file_num_...\.log$
-          // *.* => ^.*\..*$
-          // * => ^.*$
-        }
-
-        if (this.config.exclusionFilter && this.config.exclusionFilter.length) {
-          if (String(this.config.exclusionFilter).startsWith('Regex::')) {
+    if (this.config.uid && this.config.uid.length) {
+      if (this.config.baseDirectoryPath && this.config.baseDirectoryPath.length) {
+        if (this.config.inclusionFilter && this.config.inclusionFilter.length) {
+          // Prepare inclusion and exclusion filters Regexes
+          if (String(this.config.inclusionFilter).startsWith('Regex::')) {
             // Strip "Regex::" out
-            this.config.exclusionFilterRegex = this.config.exclusionFilter.substring(7);
+            this.config.inclusionFilterRegex = this.config.inclusionFilter.substring(7);
           } else {
             // Transform File System style filter to Regex
-            this.config.exclusionFilterRegex = String(this.config.exclusionFilter)
+            this.config.inclusionFilterRegex = String(this.config.inclusionFilter)
               .replace(/\./g, '\\.') // Escape dots
               .replace(/\?/g, '.') // A single char
               .replace(/\*/g, '.*') // Anything
 
-            if (!String(this.config.exclusionFilterRegex).startsWith('^')) {
-              this.config.exclusionFilterRegex = '^' + this.config.exclusionFilterRegex
+            if (!String(this.config.inclusionFilterRegex).startsWith('^')) {
+              this.config.inclusionFilterRegex = '^' + this.config.inclusionFilterRegex
             }
-            if (!String(this.config.exclusionFilterRegex).endsWith('$')) {
-              this.config.exclusionFilterRegex = this.config.exclusionFilterRegex + '$'
+            if (!String(this.config.inclusionFilterRegex).endsWith('$')) {
+              this.config.inclusionFilterRegex = this.config.inclusionFilterRegex + '$'
             }
+
+            // So:
+            // *.txt => ^.*\.txt$
+            // log_file.* => ^log_file\..*$
+            // log_file_num_???.log => ^log_file_num_...\.log$
+            // *.* => ^.*\..*$
+            // * => ^.*$
           }
-        } // If none, simply leave this.config.exclusionFilterRegex as undefined
 
-        // Prepare log message selection Regex
-        // 1. multi-line separator (exclusive)
-        // 2. multi-line start (inclusive)
-        // 3. multi-line end (inclusive)
-        // 4. EOL (exclusive)
+          if (this.config.exclusionFilter && this.config.exclusionFilter.length) {
+            if (String(this.config.exclusionFilter).startsWith('Regex::')) {
+              // Strip "Regex::" out
+              this.config.exclusionFilterRegex = this.config.exclusionFilter.substring(7);
+            } else {
+              // Transform File System style filter to Regex
+              this.config.exclusionFilterRegex = String(this.config.exclusionFilter)
+                .replace(/\./g, '\\.') // Escape dots
+                .replace(/\?/g, '.') // A single char
+                .replace(/\*/g, '.*') // Anything
 
-        this.config.logMessageSelectionRegex = ''
-          // Look for potential multi-line Separator at the beginning, without capturing it
-          + (this.config.multiLines && this.config.multiLines.msgDelimiterRegex !== undefined && this.config.multiLines.msgDelimiterRegex.length ? '(?:' + this.config.multiLines.msgDelimiterRegex + ')?' : '')
-          + '('
-          // Look for the multi-line Start, capturing it
-          + (this.config.multiLines && this.config.multiLines.msgStartRegex !== undefined && this.config.multiLines.msgStartRegex.length ? '(?:' + this.config.multiLines.msgStartRegex + ')' : '')
-          // The log message itself
-          + '.*?'
-          // Look for the multi-line Stop, capturing it
-          + (this.config.multiLines && this.config.multiLines.msgStopRegex !== undefined && this.config.multiLines.msgStopRegex.length ? '(?:' + this.config.multiLines.msgStopRegex + ')' : '')
-          + ')'
-          // Look for the multi-line Separator at the end, without capturing it. If none defined, use EOL
-          + (this.config.multiLines && this.config.multiLines.msgDelimiterRegex !== undefined && this.config.multiLines.msgDelimiterRegex.length ? '(?:' + this.config.multiLines.msgDelimiterRegex + ')' : '[\r]{0,1}\n')
-        ;
+              if (!String(this.config.exclusionFilterRegex).startsWith('^')) {
+                this.config.exclusionFilterRegex = '^' + this.config.exclusionFilterRegex
+              }
+              if (!String(this.config.exclusionFilterRegex).endsWith('$')) {
+                this.config.exclusionFilterRegex = this.config.exclusionFilterRegex + '$'
+              }
+            }
+          } // If none, simply leave this.config.exclusionFilterRegex as undefined
 
-        // Print out configuration
-        console.log('Running configuration:');
-        console.log(this.config);
+          // Prepare log message selection Regex
+          // 1. multi-line separator (exclusive)
+          // 2. multi-line start (inclusive)
+          // 3. multi-line end (inclusive)
+          // 4. EOL (exclusive)
 
-        if (this.config.inclusionFilterRegex && this.config.inclusionFilterRegex.length) {
-          if (this.loggerFunction && typeof this.loggerFunction === 'function') {
-            try {
-              // Schedule State Pruning
-              this.pruningStateInterval = setInterval(pruneState.bind(this), 86400000); // Daily
-              // Schedule Crawling Cycle
-              this.collectionCycleInterval = setInterval(collectionCycle.bind(this), this.config.frequency_in_seconds * 1000);
-              // Start first Crawling Cycle
-              setTimeout(collectionCycle.bind(this))
-              // collectionCycle.call(this)
-            } catch (err) {
+          this.config.logMessageSelectionRegex = ''
+            // Look for potential multi-line Separator at the beginning, without capturing it
+            + (this.config.multiLines && this.config.multiLines.msgDelimiterRegex !== undefined && this.config.multiLines.msgDelimiterRegex.length ? '(?:' + this.config.multiLines.msgDelimiterRegex + ')?' : '')
+            + '('
+            // Look for the multi-line Start, capturing it
+            + (this.config.multiLines && this.config.multiLines.msgStartRegex !== undefined && this.config.multiLines.msgStartRegex.length ? '(?:' + this.config.multiLines.msgStartRegex + ')' : '')
+            // The log message itself
+            + '.*?'
+            // Look for the multi-line Stop, capturing it
+            + (this.config.multiLines && this.config.multiLines.msgStopRegex !== undefined && this.config.multiLines.msgStopRegex.length ? '(?:' + this.config.multiLines.msgStopRegex + ')' : '')
+            + ')'
+            // Look for the multi-line Separator at the end, without capturing it. If none defined, use EOL
+            + (this.config.multiLines && this.config.multiLines.msgDelimiterRegex !== undefined && this.config.multiLines.msgDelimiterRegex.length ? '(?:' + this.config.multiLines.msgDelimiterRegex + ')' : '[\r]{0,1}\n')
+          ;
+
+          // Print out configuration
+          console.log('Running configuration:');
+          console.log(this.config);
+          // Print out state
+          console.log('Running state:');
+          console.log(this.state);
+
+          if (this.config.inclusionFilterRegex && this.config.inclusionFilterRegex.length) {
+            if (this.loggerFunction && typeof this.loggerFunction === 'function') {
+              try {
+                // Schedule State Pruning
+                this.pruningStateInterval = setInterval(pruneState.bind(this), 86400000); // Daily
+                // Schedule Crawling Cycle
+                this.collectionCycleInterval = setInterval(collectionCycle.bind(this), this.config.frequency_in_seconds * 1000);
+                // Start first Crawling Cycle
+                setTimeout(collectionCycle.bind(this))
+                // collectionCycle.call(this)
+              } catch (err) {
+                console.error(err);
+              }
+            } else {
+              const err = new Error('loggerFunction must be a valid function.')
               console.error(err);
             }
           } else {
-            const err = new Error('loggerFunction must be a valid function.')
+            const err = new Error('inclusionFilter must be a non empty string.' + this.config.inclusionFilter)
             console.error(err);
           }
         } else {
@@ -182,11 +202,11 @@ class FlatFileReader {
           console.error(err);
         }
       } else {
-        const err = new Error('inclusionFilter must be a non empty string.' + this.config.inclusionFilter)
+        const err = new Error('baseDirectoryPath must be a non empty string.')
         console.error(err);
       }
     } else {
-      const err = new Error('baseDirectoryPath must be a non empty string.')
+      const err = new Error('uid must be a non empty string and must be unique to this log source / stream.')
       console.error(err);
     }
   } // start
@@ -251,6 +271,9 @@ function collectionCycle() {
         ' // Files Detected: ' + this.statistics.filesDetected +
         ' // Files Collected: ' + this.statistics.filesCollected
       );
+
+      // Persist State to disk
+      persistState.call(this);
 
       console.log('🔎 - Collection Cycle finished... (Took ' + (timeTakenMs / 1000) + ' seconds // Average is ' + (this.statistics.collectionCycleDurationAverage / 1000) + ' seconds)');
       this.statistics.collectionCyclesSkippedSinceLastCompleted = 0;
@@ -452,6 +475,26 @@ function collectMessagesFromFile(fileFullPath, fromByte, toByte) {
     }
   }
   //
+}
+
+function loadState() {
+  //
+}
+
+function persistState() {
+  try {
+    fs.ensureFileSync(this.state.fullStateFilePath);
+    fs.writeFileSync(
+      this.state.fullStateFilePath,
+      JSON.stringify(Array.from(this.state.positions), null, '  '),
+      {
+        encoding: 'utf8',
+        mode: 0o640
+      }
+    );
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 function pruneState() {

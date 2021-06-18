@@ -25,8 +25,8 @@
   - [x] for each directory:
     - [x] Recursively crawl said directory
     - [x] Do not recursively crawl if reached maximum depth
-  - [ ] after each crawl cycle:
-    - [ ] persist State to disk
+  - [x] after each crawl cycle:
+    - [x] persist State to disk
   - [x] limit crawl to specific depths (from config)
   - [x] crawl interval set by config
 - [ ] regularly
@@ -43,7 +43,18 @@
 - [x] for each message
   - [x] push to Open Collector
 
+### State persistance
+- Base directory is `./states`
+- Each Input has its own state file inside of base directory, based on its UID
+  - for example `./states/state.cf1e09b1-48da-45e9-bf8a-3aa50f12fb11.json`
+- Each `state.xxx.json` file will contain an array of the all:
+  - Flat file - the files seen/tracked by the Crawler
+  - others - whatever they need tracking (last Timestamp, Event ID, etc...)
+- Each Input reads its own `state.xxx.json` file at Start, right before its first Collection Cycle
+- Each Input writes its own `state.xxx.json` after each succesfull Collection Cycle
+
 ### Configuration
+- UID (👈 Compulsory. If not provided, a new one will be given at each run time, messing up with State persistance)
 - Base directory path (👈 Compulsory)
 - Inclusions (👈 Compulsory)
 - Exclusions
