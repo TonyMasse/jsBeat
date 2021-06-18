@@ -12,10 +12,11 @@ const client = new LumberjackClient({
   port: (lumberjackConfig && lumberjackConfig.port && lumberjackConfig.port.length ? lumberjackConfig.port : 5044),
 })
 
-function logMessage (message, deviceType, filterHelpers) {
+function logMessage (message, deviceType, filterHelpers, sendExtraHostInfo) {
   // message is the Object or String to push to the Open Collector
   // deviceType is an optional String giving the specific of the device type (for example "myApp", "NetworkMonitor", "Mistnet", etc...)
   // filterHelpers is an optional Object used by the Open Collector filter to include or exclude the message (for example: { filter_abc: true, filter_xyz: false } )
+  // sendExtraHostInfo is an optional Boolean used to decide if we should send extra info about the Host / OS as well
 
   if (message !== undefined) {
     // console.log('🌠');
@@ -30,8 +31,13 @@ function logMessage (message, deviceType, filterHelpers) {
         },
         host: {
           hostname: os.hostname(),
+          os: (sendExtraHostInfo ? {
+            platform: os.platform(),
+            release: os.release(),
+            version: os.version()
+          } : undefined)
         },
-        message: message,
+        message: message
       }
     )
   }

@@ -8,17 +8,26 @@ const fs = require('fs');
 const path = require('path');
 
 // Log that we are starting
-logMessage('Beat Started', 'Heartbeat', {
-  heartbeat: true,
-  activity: 'Starting'
-})
-
+logMessage(
+  'Beat Started', // message
+  'Heartbeat', // deviceType
+  { // filterHelpers
+    heartbeat: true,
+    activity: 'Starting'
+  }, 
+  true // sendExtraHostInfo
+)
 // Setting up Heatbeat
 var heartBeatInterval = setInterval(function () {
   console.log('💖 - Heartbeat');
-  logMessage('Heartbeat - 💖', 'Heartbeat', {
-    heartbeat: true
-  })
+  logMessage(
+    'Heartbeat - 💖', // message
+    'Heartbeat', // deviceType
+    { // filterHelpers
+      heartbeat: true
+    }, 
+    true // sendExtraHostInfo
+  )
 }, 60000);
 
 // List of the active Inputs and Outputs
