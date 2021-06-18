@@ -4,12 +4,12 @@
 
 ### Crawler process:
 - [ ] Crawl the path for files matching criteria
-  - [ ] Check existence of State file for Log Source
-    - [ ] read State from disk
+  - [+] Check existence of State file for Log Source
+    - [+] read State from disk
   - [x] Check existence of root path
     - [x] If not present, set timer to check later
-  - [ ] Check if root path is File, in case user misunderstood and/or mis-configured it as a file instead of directory
-    - [ ] If it is, process it as a file directly
+  - [ ] ~~Check if root path is File, in case user misunderstood and/or mis-configured it as a file instead of directory~~
+    - [ ] ~~If it is, process it as a file directly~~
   - [ ] for each file:
     - [x] check include Filter for match
     - [x] check exclude Filter for NO match
@@ -55,8 +55,8 @@
 
 ### Configuration
 - UID (👈 Compulsory. If not provided, a new one will be given at each run time, messing up with State persistance)
-- Base directory path (👈 Compulsory)
-- Inclusions (👈 Compulsory)
+- Base directory path (👈 Compulsory, must be a directory)
+- Inclusions (👈 Compulsory, if not provided, `*` will be used, and all files within the directory and sub-directories -if depth is not `0`- will be read)
 - Exclusions
 - Multi-lines log
   - Start Regex
