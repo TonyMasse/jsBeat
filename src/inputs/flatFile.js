@@ -169,6 +169,9 @@ class FlatFileReader {
             + (this.config.multiLines && this.config.multiLines.msgDelimiterRegex !== undefined && this.config.multiLines.msgDelimiterRegex.length ? '(?:' + this.config.multiLines.msgDelimiterRegex + ')' : '[\r]{0,1}\n')
           ;
 
+          // Load pre-existing State from disk
+          loadState.call(this);
+
           // Print out configuration
           console.log('Running configuration:');
           console.log(this.config);
@@ -471,14 +474,25 @@ function collectMessagesFromFile(fileFullPath, fromByte, toByte) {
       }
 
     } catch (err) {
-      //
+      // fails silently
     }
   }
-  //
 }
 
 function loadState() {
-  //
+  try {
+    const stateArray = fs.readFileSync(
+      this.state.fullStateFilePath,
+      {
+        encoding: 'utf8'
+      }
+    );
+    if (stateArray) {
+      this.state.positions = new Map(JSON.parse(stateArray));
+    }
+  } catch (err) {
+    console.log('Failed to load previous State for this Log Source. Reason: ', err);
+  }
 }
 
 function persistState() {
@@ -493,7 +507,7 @@ function persistState() {
       }
     );
   } catch (err) {
-    console.log(err);
+    console.log('Failed to persist State for this Log Source. Reason: ', err);
   }
 }
 
