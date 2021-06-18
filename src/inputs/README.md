@@ -30,13 +30,13 @@
 
 ### Collect process
 - [ ] if required (from config) decompress file
-- [ ] use Regex to spot EOL for Linux, Windows and Mac
-- [ ] use Regex to reconstruct multi-lines log
-  - [ ] Start Regex
-  - [ ] End Regex
-  - [ ] Separator Regex
-- [ ] for each message
-  - [ ] push to Open Collector
+- [x] use Regex to spot EOL for Linux, Windows and Mac
+- [x] use Regex to reconstruct multi-lines log
+  - [x] Start Regex
+  - [x] End Regex
+  - [x] Separator Regex
+- [x] for each message
+  - [x] push to Open Collector
 
 ### Configuration
 - Base directory path
