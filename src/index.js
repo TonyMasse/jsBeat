@@ -43,45 +43,51 @@ if (inputConfig && Array.isArray(inputConfig)) {
     if (input.log_source_type) {
       const logSourceTypeLowerCase = String(input.log_source_type).toLowerCase()
 
-      // Flat File
-      if (logSourceTypeLowerCase === 'flatfile') {
-        if (input.baseDirectoryPath && input.baseDirectoryPath.length) {
-          const deviceType = (input.device_type && input.device_type.length ? input.device_type : undefined)
-          inputs.push(
-            {
-              type: 'flatFile',
-              name: deviceType || input.baseDirectoryPath,
-              // handler: new FlatFileReaderTail({
-              handler: new FlatFileReader({
-                path: input.baseDirectoryPath, // Backward compatibility with FlatFileReaderTail
-                baseDirectoryPath: input.baseDirectoryPath, // Going forward, with FlatFileReader
-                inclusionFilter: input.inclusionFilter,
-                exclusionFilter: input.exclusionFilter,
-                recursionDepth: input.recursionDepth,
-                daysToWatchModifiedFiles: input.daysToWatchModifiedFiles,
-                compressionType: input.compressionType,
-                multiLines: input.multiLines,
-                frequency_in_seconds: input.frequency_in_seconds,
+      if (input.uid && input.uid.length) {
 
-                autoStart: true,
-                printToConsole: input.printToConsole || input.printOnlyToConsole,
-                sendToOpenCollector: !(input.printOnlyToConsole === true),
-                deviceType,
-                filterHelpers: {
-                  ...input.filter_helpers,
-                  flatFile: true,
-                  filePath: input.baseDirectoryPath,
-                  logSourceType: 'Flat File'
-                }
-              },
-              logMessage)
-            }
-          )
-        } else {
-          console.log('WARNING: Flat File Log Source definition is missing baseDirectoryPath. Skipping.');
-        }
-      } // Flat File
+        // Flat File
+        if (logSourceTypeLowerCase === 'flatfile') {
+          if (input.baseDirectoryPath && input.baseDirectoryPath.length) {
+            const deviceType = (input.device_type && input.device_type.length ? input.device_type : undefined)
+            inputs.push(
+              {
+                type: 'flatFile',
+                name: deviceType || input.baseDirectoryPath,
+                // handler: new FlatFileReaderTail({
+                handler: new FlatFileReader({
+                  uid: input.uid,
+                  path: input.baseDirectoryPath, // Backward compatibility with FlatFileReaderTail
+                  baseDirectoryPath: input.baseDirectoryPath, // Going forward, with FlatFileReader
+                  inclusionFilter: input.inclusionFilter,
+                  exclusionFilter: input.exclusionFilter,
+                  recursionDepth: input.recursionDepth,
+                  daysToWatchModifiedFiles: input.daysToWatchModifiedFiles,
+                  compressionType: input.compressionType,
+                  multiLines: input.multiLines,
+                  frequency_in_seconds: input.frequency_in_seconds,
 
+                  autoStart: true,
+                  printToConsole: input.printToConsole || input.printOnlyToConsole,
+                  sendToOpenCollector: !(input.printOnlyToConsole === true),
+                  deviceType,
+                  filterHelpers: {
+                    ...input.filter_helpers,
+                    flatFile: true,
+                    filePath: input.baseDirectoryPath,
+                    logSourceType: 'Flat File'
+                  }
+                },
+                logMessage)
+              }
+            )
+          } else {
+            console.log('WARNING: Flat File Log Source definition is missing baseDirectoryPath. Skipping.');
+          }
+        } // Flat File
+
+      } else {
+        console.log('WARNING: Log Source definition is missing uid. Skipping.');
+    }
     } else {
       console.log('WARNING: Log Source definition is missing log_source_type. Skipping.');
     }
