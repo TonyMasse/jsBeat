@@ -57,7 +57,7 @@ class FlatFileReader {
     }
 
     // Set recursionDepth to 5 by default
-    if (!this.config.recursionDepth || (this.config.recursionDepth && this.config.recursionDepth <= 0)) {
+    if ((this.config.recursionDepth === undefined) || (this.config.recursionDepth && this.config.recursionDepth < 0)) {
       this.config.recursionDepth = 5
     }
 
@@ -135,6 +135,31 @@ class FlatFileReader {
           }
         } // If none, simply leave this.config.exclusionFilterRegex as undefined
 
+        // Prepare log message selection Regex
+        // 1. multi-line separator (exclusive)
+        // 2. multi-line start (inclusive)
+        // 3. multi-line end (inclusive)
+        // 4. EOL (exclusive)
+
+        this.config.logMessageSelectionRegex = ''
+          // Look for potential multi-line Separator at the beginning, without capturing it
+          + (this.config.multiLines && this.config.multiLines.msgDelimiterRegex !== undefined && this.config.multiLines.msgDelimiterRegex.length ? '(?:' + this.config.multiLines.msgDelimiterRegex + ')?' : '')
+          + '('
+          // Look for the multi-line Start, capturing it
+          + (this.config.multiLines && this.config.multiLines.msgStartRegex !== undefined && this.config.multiLines.msgStartRegex.length ? '(?:' + this.config.multiLines.msgStartRegex + ')' : '')
+          // The log message itself
+          + '.*?'
+          // Look for the multi-line Stop, capturing it
+          + (this.config.multiLines && this.config.multiLines.msgStopRegex !== undefined && this.config.multiLines.msgStopRegex.length ? '(?:' + this.config.multiLines.msgStopRegex + ')' : '')
+          + ')'
+          // Look for the multi-line Separator at the end, without capturing it. If none defined, use EOL
+          + (this.config.multiLines && this.config.multiLines.msgDelimiterRegex !== undefined && this.config.multiLines.msgDelimiterRegex.length ? '(?:' + this.config.multiLines.msgDelimiterRegex + ')' : '[\r]{0,1}\n')
+        ;
+
+        // Print out configuration
+        console.log('Running configuration:');
+        console.log(this.config);
+
         if (this.config.inclusionFilterRegex && this.config.inclusionFilterRegex.length) {
           if (this.loggerFunction && typeof this.loggerFunction === 'function') {
             try {
@@ -199,6 +224,8 @@ function collectionCycle() {
       // Let's get cracking!
       this.statistics.directoriesScanned = 0;
       this.statistics.directoriesSkipped = 0;
+      this.statistics.filesDetected = 0;
+      this.statistics.filesCollected = 0;
       this.statistics.entriesErrored = 0;
       crawl.call(this, this.config.baseDirectoryPath, 0);
     } catch (err) {
@@ -267,7 +294,8 @@ function crawl(directory, depth) {
             if (String(entry).match(this.config.inclusionFilterRegex)) {
               // And if it does't our exclusion Regex
               if (!this.config.exclusionFilterRegex || (this.config.exclusionFilterRegex && !String(entry).match(this.config.exclusionFilterRegex))) {
-                console.log('🦔 - processing: ' + entry);
+                // console.log('🦔 - processing: ' + entry);
+                this.statistics.filesDetected++;
                 const previousStats = this.state.positions.get(entryFullPath)
                 if (previousStats) {
                   // Existing File
@@ -316,12 +344,112 @@ function crawl(directory, depth) {
 
 function collectMessagesFromFile(fileFullPath, fromByte, toByte) {
   if (fileFullPath && fileFullPath.length && fromByte >= 0 && toByte > fromByte) {
-    console.log('🚀 - collectMessagesFromFile "' + fileFullPath + '" from Byte: ' + fromByte + ' to Byte: ' + toByte);
-    if (this.config.compressionType && this.config.compressionType.length) {
-      // Handle decompression
-    }
-    // fs.readSync
+    try {
+      console.log('🚀 - Collect messages from file: "' + fileFullPath + '" from Byte: ' + fromByte + ' to Byte: ' + toByte);
+      this.statistics.filesCollected++;
+      if (this.config.compressionType && this.config.compressionType.length) {
+        // Handle decompression
+        console.log('🚀 - WARNING : Compression is not yet implemented.');
+      }
 
+      try {
+        const fileDescriptor = fs.openSync(fileFullPath, 'r');
+
+        const bufferSize = 5242880; // 5 Megabytes
+        let buffer = new Buffer.alloc(bufferSize);
+        const bytesToReadTotal = toByte - fromByte; // Bytes to read in total
+        let bytesToRead = 0; // Bytes to read in one chunk
+        let bytesReadTotal = 0; // Bytes read in total
+        let bytesRead = 0; // Bytes read in one chunk
+        let readFromByte = 0; // First byte read for the chunk
+        let messageMathesCountTotal = 0; // Total number of parsed messages
+        let messageMathesCount = 0; // Number of parsed messages for this chunk
+        let messagePushedToOpenCollectorCountTotal = 0; // Total number of messages sent to the Open Collector
+        let messagePushedToOpenCollectorCount = 0; // Number of messages sent to the Open Collector for this chunk
+
+        let infiniteLoopBreaker = 1000; // Just to be safe :)
+        while ((bytesReadTotal < bytesToReadTotal) && (infiniteLoopBreaker > 0)) {
+          infiniteLoopBreaker--; // Just to be safe :)
+
+          // Calculate how many bytes left to gather, but cap to the buffer size if needed
+          bytesToRead = bytesToReadTotal - bytesReadTotal;
+          if (bytesToRead > bufferSize) {
+            bytesToRead = bufferSize
+          }
+
+          // Calculate starting point for this chunk
+          readFromByte = fromByte + bytesReadTotal;
+
+          // Load the goods
+          bytesRead = fs.readSync(fileDescriptor, buffer, 0, bytesToRead, readFromByte);
+
+          // Slice the buffer into log messages
+          
+          const bufferAsString = buffer.toString('utf8', 0, bytesRead); // Transpose to a String the bytes received (ignoring the rest of the buffer)
+          messageMathesCount = 0;
+          messagePushedToOpenCollectorCount = 0;
+          try {
+            let tempLogMessageSelectionRegex = new RegExp(
+              this.config.logMessageSelectionRegex,
+              // Regex Flags:
+              // - g: Global search
+              // - m: Multi-line search
+              // - s: Allows . to match newline characters
+              'gms'
+              );
+            let messageMatches = tempLogMessageSelectionRegex.exec(bufferAsString);
+            while (messageMatches) {
+              messageMathesCount++;
+              // console.log('🚀 >>> ', messageMatches[1]);
+
+              // Push the message out
+              if (this.config.printToConsole === true) {
+                console.log(messageMatches[1]);
+              }
+              if (this.config.sendToOpenCollector === true) {
+                try {
+                  this.loggerFunction(messageMatches[1], this.config.deviceType, { ...this.config.filterHelpers, filePath: fileFullPath });
+                  messagePushedToOpenCollectorCount++;
+                } catch (err) {
+                  // Fails once with an error, then silently
+                  if (this.state.hasFailedToUseLogger !== true) {
+                    this.state.hasFailedToUseLogger = true;
+                    const err = new Error('Failed to send line to Open Collector via Lumberjack.')
+                    console.log('ERROR: ', err);
+                  }
+                }
+              }
+
+              messageMatches = tempLogMessageSelectionRegex.exec(bufferAsString);
+            }
+          } catch (err) {
+            console.log('🚀 - 🟠 WARNING - Message parsing', err);
+          } finally {
+            //
+          }
+
+          // And finally update the counters
+          bytesReadTotal += bytesRead;
+          messageMathesCountTotal += messageMathesCount;
+          messagePushedToOpenCollectorCountTotal += messagePushedToOpenCollectorCount;
+        }
+        if (infiniteLoopBreaker <= 0) {
+          console.log('🚀 - 🟠 WARNING: Hitting the buffer on the file read loop...');
+        }
+        console.log('🚀 - 🔢🏁 - Stats // Bytes read: ' + bytesReadTotal + ' // Messages parsed: ' + messageMathesCountTotal + ' // Messages pushed to Open Collector: ' + messagePushedToOpenCollectorCountTotal);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        try {
+          fs.closeSync(fileDescriptor);
+        } catch (err) {
+          // fails silently
+        }
+      }
+
+    } catch (err) {
+      //
+    }
   }
   //
 }

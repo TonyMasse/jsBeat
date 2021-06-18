@@ -5,8 +5,8 @@
     "filter_helpers": {
       "System_Messages": true
     },
-    "baseDirectoryPath": "/var/log/",
-    "inclusionFilter": "messages",
+    "baseDirectoryPath": "/var/log",
+    "inclusionFilter": "firewalld",
     "exclusionFilter": "",
     "recursionDepth": 0,
     "daysToWatchModifiedFiles": 0,
@@ -16,8 +16,8 @@
       "msgStopRegex": "",
       "msgDelimiterRegex": ""
     },
-    "frequency_in_seconds": 5,
-    "printToConsole": true
+    "frequency_in_seconds": 3,
+    "printToConsole": false
   },
   {
     "log_source_type": "flatFile ********** COMMENTED OUT ************",
