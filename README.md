@@ -8,4 +8,6 @@
   - [x] collecting Flat Files
   - [ ] receiving log data over Syslog
 
+More information on the Inputs: [there](src/inputs/).
+
 - To send the log data in the native format / protocol of the LogRhythm Open Collector
