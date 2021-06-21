@@ -1,11 +1,16 @@
+// To read config files
+const fs = require('fs');
+const path = require('path');
+
+// Storing the base directory name of the process, to be used elsewere while loading configuration and other files
+// The reason for this is that once packed, all these calls are made from the very same file, so __dirname of source 
+// files in sub-directories don't reflect the __dirname once packed.
+process.env.baseDirname = path.join(__dirname, '..');
+
 // Load the logMessage function to push messages via Lumberjack to Open Collector
 const { logMessage } = require('./outputs/logMessage');
 const { FlatFileReaderTail } = require('./inputs/flatFileTail');
 const { FlatFileReader } = require('./inputs/flatFile');
-
-// To read config files
-const fs = require('fs');
-const path = require('path');
 
 // Log that we are starting
 logMessage(
@@ -35,7 +40,7 @@ const inputs = [];
 const outputs = [];
 
 // Get Inputs config
-const inputConfig = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config', 'log_sources.json'), 'utf8'));
+const inputConfig = JSON.parse(fs.readFileSync(path.join(process.env.baseDirname, 'config', 'log_sources.json'), 'utf8'));
 
 // Build Inputs from config
 if (inputConfig && Array.isArray(inputConfig)) {

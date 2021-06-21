@@ -5,7 +5,7 @@ const os = require('os');
 const fs = require('fs');
 const path = require('path');
 
-const lumberjackConfig = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'config', 'lumberjack.json'), 'utf8'));
+const lumberjackConfig = JSON.parse(fs.readFileSync(path.join(process.env.baseDirname, 'config', 'lumberjack.json'), 'utf8'));
 
 const client = new LumberjackClient({
   host: (lumberjackConfig && lumberjackConfig.host && lumberjackConfig.host.length ? lumberjackConfig.host : 'localhost'),

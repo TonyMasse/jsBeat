@@ -71,7 +71,7 @@ class FlatFileReader {
     }
 
     // Prep State file path
-    this.state.fullStateFilePath = path.join(process.env.PWD, 'states', 'state.' + this.config.uid + '.json');
+    this.state.fullStateFilePath = path.join(process.env.baseDirname, 'states', 'state.' + this.config.uid + '.json');
 
     // Call use() to add the loggerFunction if already provided
     if (loggerFunction) {
