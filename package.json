@@ -1,7 +1,7 @@
 {
   "name": "jsbeat",
   "version": "1.0.0",
-  "description": "",
+  "description": "A light, Javascript based, Beat to collect data for the Open Collector",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
