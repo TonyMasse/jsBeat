@@ -16,8 +16,8 @@ async function getData () {
   // openssl pkcs12 -in 0000-abcdef.p12 -out https.cert.pem -clcerts -nokeys
   // openssl pkcs12 -in 0000-abcdef.p12 -out https.key.pem -nocerts -nodes
 
-  const httpsKey = fs.readFileSync(path.join(__dirname, '..', '..', 'config', 'https.key.pem'));
-  const httpsCert = fs.readFileSync(path.join(__dirname, '..', '..', 'config', 'https.cert.pem'));
+  const httpsKey = fs.readFileSync(path.join(process.env.baseDirname, 'config', 'https.key.pem'));
+  const httpsCert = fs.readFileSync(path.join(process.env.baseDirname, 'config', 'https.cert.pem'));
   
   console.log(' - 🎁 - 0');
   
