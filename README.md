@@ -11,3 +11,6 @@
 More information on the Inputs: [there](src/inputs/).
 
 - To send the log data in the native format / protocol of the LogRhythm Open Collector
+
+### Fancy contributing
+See [coding instructions there](src/).
