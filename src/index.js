@@ -40,7 +40,7 @@ const inputs = [];
 const outputs = [];
 
 // Get Inputs config
-const inputConfig = JSON.parse(fs.readFileSync(path.join(process.env.baseDirname, 'config', 'log_sources.json'), 'utf8'));
+const inputConfig = JSON.parse(fs.readFileSync(path.join(process.env.baseDirname, 'config', 'inputs.json'), 'utf8'));
 
 // Build Inputs from config
 if (inputConfig && Array.isArray(inputConfig)) {
@@ -98,7 +98,7 @@ if (inputConfig && Array.isArray(inputConfig)) {
     }
   })
 } else {
-  console.log('ERROR: log_sources.json must contain an array of Log Source definitions.');
+  console.log('ERROR: inputs.json must contain an array of Log Source definitions.');
 }
 
 
