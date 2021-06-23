@@ -1,10 +1,10 @@
 # Configuration
 
 ## jsBeat.json
-Optional: yes
-Type: JSON file
-Default path: `{jsBeatRoot}/config/jsBeat.json`
-Path cath can be overridden by: `--jsBeatConfigFile` via the command line.
+- Optional: yes
+- Type: JSON file
+- Default path: `{jsBeatRoot}/config/jsBeat.json`
+- Path cath can be overridden by: `--jsBeatConfigFile` via the command line.
 
 | Field | Default value | Description |
 |-------|---------------|-------------|
@@ -29,11 +29,11 @@ __Example:__
   
 
 ## lumberjack.json
-Optional: yes
-Type: JSON file
-Default path: `{jsBeatRoot}/config/lumberjack.json`
-Path can be overridden by `lumberjackConfigPath` inside of `config/jsBeat.json`.
-Path can be overridden by `--lumberjackConfigPath` via the command line.
+- Optional: yes
+- Type: JSON file
+- Default path: `{jsBeatRoot}/config/lumberjack.json`
+- Path can be overridden by `lumberjackConfigPath` inside of `config/jsBeat.json`.
+- Path can be overridden by `--lumberjackConfigPath` via the command line.
 
 Parameters for the Lumberjack protocol. Defines how to connect to the Open Collector.
 
@@ -51,11 +51,11 @@ __Example:__
 ```
 
 ## inputs.json
-Optional: yes
-Type: JSON file
-Default path: `{jsBeatRoot}/config/inputs.json`
-Path can be overridden by `inputsConfigFilePath` inside of `config/jsBeat.json`.
-Path can be overridden by `--inputsConfigFilePath` via the command line.
+- Optional: yes
+- Type: JSON file
+- Default path: `{jsBeatRoot}/config/inputs.json`
+- Path can be overridden by `inputsConfigFilePath` inside of `config/jsBeat.json`.
+- Path can be overridden by `--inputsConfigFilePath` via the command line.
 
 Description of one or several Log Sources. Works in addition to the definitions (if any) found in `{jsBeatRoot}/config/inputs.d/`.
 
@@ -64,6 +64,10 @@ Compulsory fields:
 - `uid`
 - `baseDirectoryPath`
 - `inclusionFilter`
+
+Strongly advised:
+- `device_type`
+- `filter_helpers`
 
 __Example:__
 ```json
@@ -117,13 +121,23 @@ __Example:__
 ```
 
 ## inputs.d/
-Optional: yes
-Type: Directory
-Default path: `{jsBeatRoot}/config/inputs.d/`
-Path can be overridden by `inputsConfigFilesDirectoryPath` inside of `config/jsBeat.json`.
-Path can be overridden by `--inputsConfigFilesDirectoryPath` via the command line.
+- Optional: yes
+- Type: Directory
+- Default path: `{jsBeatRoot}/config/inputs.d/`
+- Path can be overridden by `inputsConfigFilesDirectoryPath` inside of `config/jsBeat.json`.
+- Path can be overridden by `--inputsConfigFilesDirectoryPath` via the command line.
 
 Contains individual Log Source description files. Works in addition to the definitions (if any) found in {jsBeatRoot}/config/inputs.json`.
+
+Compulsory fields:
+- `log_source_type`
+- `uid`
+- `baseDirectoryPath`
+- `inclusionFilter`
+
+Strongly advised:
+- `device_type`
+- `filter_helpers`
 
 __Examples:__
 - `{jsBeatRoot}/config/inputs.d/firewalld.json`
