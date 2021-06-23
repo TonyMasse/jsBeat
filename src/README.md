@@ -16,3 +16,5 @@ rm -rf jsbeat-x.y.z/
 ```
 *(where `x.y.z` is the version number, like `1.0.0`, or `5.4.3`)*
 
+### Check the TODO list
+👉 [TODO](../TODO.md)
