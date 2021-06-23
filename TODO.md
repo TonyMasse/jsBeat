@@ -13,6 +13,7 @@
   - [ ] Specify Lumberjack JSON file via command line argument
   - [ ] Specify location of State directory via command line argument
 - [ ] Read Input JSON files from a directory (`config/inputs.d/*.json`)
+- [ ] Ability to write logs to `/var/log/jsBeat`
 - [ ] Clean up (limit) output STDOUT
   - [ ] Create a Log Level global variable with one of these values
     - 1 - Debug
@@ -23,7 +24,6 @@
     - 6 - Critical
   - [ ] use Log Level to decide what to output
   - [ ] Create a logging function to make all this easy
-- [ ] Ability to write logs to `/var/log/jsBeat`
 - [ ] Provide SHA256 checksum with wach Release
 - [ ] Add Syslog support
   - [ ] UDP
