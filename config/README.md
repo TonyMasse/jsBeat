@@ -15,7 +15,7 @@
 | lumberjackConfigPath | `{jsBeatRoot}/config/lumberjack.json` | Parameters for the Lumberjack protocol. Defines how to connect to the Open Collector. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. |
 | decompressionTemporaryRootPath | `/tmp/jsBeat/decompressedFiles` | Temporary directory inside of which new directories will be created if needed to temporarily store decompressed files, while they get processed. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. |
 | logFilePath | `/var/log/jsBeat` | Log file of jsBeat. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. |
-| logLevel | `information` | Level of logging details. Possible values: `crititical`, `error`, `warning`, `information`, `verbose`, `debug` |
+| logLevel | `information` | Level of logging details. Possible values: `critical`, `error`, `warning`, `information`, `verbose`, `debug` |
 
 __Example:__
 ```json
