@@ -12,6 +12,10 @@ More information on the Inputs: [there](src/inputs/).
 
 - To send the log data in the native format / protocol of the LogRhythm Open Collector
 
+### Configuration
+
+See [configuration help and examples](config/).
+
 ### Fancy contributing?
 - See [coding instructions there](src/).
 - Visit the [TODO](TODO.md) list.
