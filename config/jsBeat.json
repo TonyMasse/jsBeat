@@ -4,5 +4,7 @@
   "inputsConfigFilePath": "{jsBeatRoot}/config/inputs.json",
   "inputsConfigFilesDirectoryPath": "{jsBeatRoot}/config/inputs.d",
   "lumberjackConfigPath": "{jsBeatRoot}/config/lumberjack.json",
-  "decompressionTemporaryRootPath": "/tmp/jsBeat/decompressedFiles"
+  "decompressionTemporaryRootPath": "/tmp/jsBeat/decompressedFiles",
+  "logFilePath": "/var/log/jsBeat",
+  "logLevel": "information"
 }

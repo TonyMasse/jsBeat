@@ -8,12 +8,17 @@
   - [ ] Inputs JSON file location
   - [ ] Lumberjack JSON file location
   - [ ] Temporary folder location for decompression of Flat Files (for example `/tmp/some_sub_directory/`)
+  - [ ] Log file
+  - [ ] Log Level
+  - [ ] Update `config/README.md`
 - [ ] Ability to specify config files via command line
   - [ ] Specify Inputs JSON file via command line argument
   - [ ] Specify Lumberjack JSON file via command line argument
   - [ ] Specify location of State directory via command line argument
+  - [ ] Update `config/README.md`
 - [ ] Read Input JSON files from a directory (`config/inputs.d/*.json`)
 - [ ] Ability to write logs to `/var/log/jsBeat`
+  - [ ] Update `config/README.md`
 - [ ] Clean up (limit) output STDOUT
   - [ ] Create a Log Level global variable with one of these values
     - 1 - Debug

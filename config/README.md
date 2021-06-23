@@ -1,10 +1,10 @@
 # Configuration
 
-## jsBeat.json
+## jsBeat.json (:construction: Not yet implemented)
 - Optional: yes
 - Type: JSON file
 - Default path: `{jsBeatRoot}/config/jsBeat.json`
-- Path cath can be overridden by: `--jsBeatConfigFile` via the command line.
+- Path cath can be overridden by: `--jsBeatConfigFile` via the command line. (:construction: Not yet implemented)
 
 | Field | Default value | Description |
 |-------|---------------|-------------|
@@ -14,6 +14,8 @@
 | inputsConfigFilesDirectoryPath | `{jsBeatRoot}/config/inputs.d` | Contains individual Log Source description files. Works in addition to the definitions (if any) found in `inputsConfigFilePath`. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`.  |
 | lumberjackConfigPath | `{jsBeatRoot}/config/lumberjack.json` | Parameters for the Lumberjack protocol. Defines how to connect to the Open Collector. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. |
 | decompressionTemporaryRootPath | `/tmp/jsBeat/decompressedFiles` | Temporary directory inside of which new directories will be created if needed to temporarily store decompressed files, while they get processed. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. |
+| logFilePath | `/var/log/jsBeat` | Log file of jsBeat. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. |
+| logLevel | `information` | Level of logging details. Possible values: `crititical`, `error`, `warning`, `information`, `verbose`, `debug` |
 
 __Example:__
 ```json
@@ -23,7 +25,9 @@ __Example:__
   "inputsConfigFilePath": "{jsBeatRoot}/config/inputs.json",
   "inputsConfigFilesDirectoryPath": "{jsBeatRoot}/config/inputs.d",
   "lumberjackConfigPath": "{jsBeatRoot}/config/lumberjack.json",
-  "decompressionTemporaryRootPath": "/tmp/jsBeat/decompressedFiles"
+  "decompressionTemporaryRootPath": "/tmp/jsBeat/decompressedFiles",
+  "logFilePath": "/var/log/jsBeat",
+  "logLevel": "information"
 }
 ```
   
@@ -33,14 +37,14 @@ __Example:__
 - Type: JSON file
 - Default path: `{jsBeatRoot}/config/lumberjack.json`
 - Path can be overridden by `lumberjackConfigPath` inside of `config/jsBeat.json`.
-- Path can be overridden by `--lumberjackConfigPath` via the command line.
+- Path can be overridden by `--lumberjackConfigPath` via the command line. (:construction: Not yet implemented)
 
 Parameters for the Lumberjack protocol. Defines how to connect to the Open Collector.
 
 | Field | Default value | Description |
 |-------|---------------|-------------|
-| host | localhost | Host running the Open Collector. |
-| port | 5044 | Port the Open Collector listens to. |  
+| host | `localhost` | Host running the Open Collector. |
+| port | `5044` | Port the Open Collector listens to. |  
 
 __Example:__
 ```json
@@ -55,7 +59,7 @@ __Example:__
 - Type: JSON file
 - Default path: `{jsBeatRoot}/config/inputs.json`
 - Path can be overridden by `inputsConfigFilePath` inside of `config/jsBeat.json`.
-- Path can be overridden by `--inputsConfigFilePath` via the command line.
+- Path can be overridden by `--inputsConfigFilePath` via the command line. (:construction: Not yet implemented)
 
 Description of one or several Log Sources. Works in addition to the definitions (if any) found in `{jsBeatRoot}/config/inputs.d/`.
 
@@ -120,12 +124,12 @@ __Example:__
 ]
 ```
 
-## inputs.d/
+## inputs.d/ (:construction: Not yet implemented)
 - Optional: yes
 - Type: Directory
 - Default path: `{jsBeatRoot}/config/inputs.d/`
 - Path can be overridden by `inputsConfigFilesDirectoryPath` inside of `config/jsBeat.json`.
-- Path can be overridden by `--inputsConfigFilesDirectoryPath` via the command line.
+- Path can be overridden by `--inputsConfigFilesDirectoryPath` via the command line. (:construction: Not yet implemented)
 
 Contains individual Log Source description files. Works in addition to the definitions (if any) found in {jsBeatRoot}/config/inputs.json`.
 
