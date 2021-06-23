@@ -15,12 +15,12 @@
 - [ ] Read Input JSON files from a directory (`config/inputs.d/*.json`)
 - [ ] Clean up (limit) output STDOUT
   - [ ] Create a Log Level global variable with one of these values
-    - 1. Debug
-    - 2. Verbose
-    - 3. Info
-    - 4. Warning
-    - 5. Error
-    - 6. Critical
+    - 1 - Debug
+    - 2 - Verbose
+    - 3 - Info
+    - 4 - Warning
+    - 5 - Error
+    - 6 - Critical
   - [ ] use Log Level to decide what to output
   - [ ] Create a logging function to make all this easy
 - [ ] Ability to write logs to `/var/log/jsBeat`
