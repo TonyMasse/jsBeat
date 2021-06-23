@@ -24,12 +24,12 @@ Description=A light, Javascript based, Beat to collect data for the Open Collect
 Documentation=https://github.com/TonyMasse/jsBeat
 Wants=network-online.target
 After=network-online.target
-StartLimitIntervalSec=0
 
 [Service]
 ExecStart=/opt/jsBeat/bin/start.sh
 Restart=always
 RestartSec=5
+StartLimitIntervalSec=0
 Type=simple
 
 [Install]
