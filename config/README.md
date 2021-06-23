@@ -6,6 +6,10 @@
 - Default path: `{jsBeatRoot}/config/jsBeat.json`
 - Path cath can be overridden by: `--jsBeatConfigFile` via the command line. (:construction: Not yet implemented)
 
+Overal configuraion of jsBeat.
+
+> All the fields are optional
+
 | Field | Default value | Description |
 |-------|---------------|-------------|
 | jsBeatRoot | `null` | If provided, the root of the jsBeat paths. `{jsBeatRoot}` can then be used in any other paths, and will be replaced by this value. If not provided `{jsBeatRoot}` will be replaced by the jsBeat root path detected at runtime. |
@@ -40,6 +44,8 @@ __Example:__
 - Path can be overridden by `--lumberjackConfigPath` via the command line. (:construction: Not yet implemented)
 
 Parameters for the Lumberjack protocol. Defines how to connect to the Open Collector.
+
+> All the fields are optional
 
 | Field | Default value | Description |
 |-------|---------------|-------------|
