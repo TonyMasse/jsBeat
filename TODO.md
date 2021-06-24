@@ -17,8 +17,8 @@
   - [x] Specify location of State directory via command line argument
   - [x] Update `config/README.md`
 - [x] Read Input JSON files from a directory (`config/inputs.d/*.json`)
-- [ ] Ability to write logs to `/var/log/jsBeat`
-  - [ ] Update `config/README.md`
+- [x] Ability to write logs to `/var/log/jsBeat`
+  - [x] Update `config/README.md`
 - [x] Clean up (limit) output STDOUT
   - [x] Create a Log Level global variable with one of these values
     - 1 - Debug
@@ -29,11 +29,6 @@
     - 6 - Critical
   - [x] Use Log Level to decide what to output
   - [x] Create a logging function to make all this easy
-- [ ] Provide SHA256 checksum with wach Release
-- [ ] Add Syslog support
-  - [ ] UDP
-  - [ ] TCP
-    - [ ] Secure Syslog
 - [ ] Flat file - Ability to NOT collect from the beginning
 - [ ] Flat file - Handle compressed files
   - [ ] Decompress in `/tmp/some_sub_directory/log_source_specific_folder/flat_file_specific_folder`
@@ -42,6 +37,11 @@
     - [ ] Read decompressed file
     - [ ] Delete decompressed file
   - [ ] Delete `/tmp/some_sub_directory/log_source_specific_folder/flat_file_specific_folder`
+- [ ] Add Syslog support
+  - [ ] UDP
+  - [ ] TCP
+    - [ ] Secure Syslog
+- [ ] Provide SHA256 checksum with wach Release
 
 ## TO FIX
 :hole:
