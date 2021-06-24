@@ -4,7 +4,8 @@ Where `{jsBeatRoot}` can be used in a path, it will be replaced by either (in de
 - the path provided by `--jsBeatRoot` via the command line, if any
 - the jsBeat root path detected at runtime
 
-> IMPORTANT
+> __IMPORTANT__
+>
 > If the path provided by `--jsBeatRoot` via the command line doesn't exist, __jsBeat__ will exit.
 
 ## jsBeat.json
@@ -15,6 +16,8 @@ Where `{jsBeatRoot}` can be used in a path, it will be replaced by either (in de
 
 Overal configuraion of jsBeat.
 
+> __NOTE__
+>
 > All the fields are optional
 
 | Field | Default value | Description | Overridden by |
@@ -51,6 +54,8 @@ __Example:__
 
 Parameters for the Lumberjack protocol. Defines how to connect to the Open Collector.
 
+> __NOTE__
+>
 > All the fields are optional
 
 | Field | Default value | Description |
