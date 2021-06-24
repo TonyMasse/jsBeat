@@ -3,20 +3,20 @@
 ### Target: current dev
 
 ## TO DO
-- [ ] Create and use General JSON configuration file to store
-  - [ ] State folder location
-  - [ ] Inputs JSON file location
-  - [ ] Lumberjack JSON file location
-  - [ ] Temporary folder location for decompression of Flat Files (for example `/tmp/some_sub_directory/`)
-  - [ ] Log file
-  - [ ] Log Level
-  - [ ] Update `config/README.md`
-- [ ] Ability to specify config files via command line
-  - [ ] Specify Inputs JSON file via command line argument
-  - [ ] Specify Lumberjack JSON file via command line argument
-  - [ ] Specify location of State directory via command line argument
-  - [ ] Update `config/README.md`
-- [ ] Read Input JSON files from a directory (`config/inputs.d/*.json`)
+- [x] Create and use General JSON configuration file to store
+  - [x] State folder location
+  - [x] Inputs JSON file location
+  - [x] Lumberjack JSON file location
+  - [x] Temporary folder location for decompression of Flat Files (for example `/tmp/some_sub_directory/`)
+  - [x] Log file
+  - [x] Log Level
+  - [x] Update `config/README.md`
+- [x] Ability to specify config files via command line
+  - [x] Specify Inputs JSON file via command line argument
+  - [x] Specify Lumberjack JSON file via command line argument
+  - [x] Specify location of State directory via command line argument
+  - [x] Update `config/README.md`
+- [x] Read Input JSON files from a directory (`config/inputs.d/*.json`)
 - [ ] Ability to write logs to `/var/log/jsBeat`
   - [ ] Update `config/README.md`
 - [ ] Clean up (limit) output STDOUT
