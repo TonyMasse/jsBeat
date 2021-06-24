@@ -1,6 +1,9 @@
 const LumberjackClient = require('lumberjack-client');
 const os = require('os');
 
+// Load the System Logging functions
+const { logToSystem } = require('../systemLogging');
+
 // Get Lumberjack config
 const fs = require('fs');
 const path = require('path');
@@ -16,7 +19,7 @@ let lumberjackConfig = {};
 try {
   lumberjackConfig = JSON.parse(fs.readFileSync(lumberjackConfigFilePath, 'utf8'));
 } catch (err) {
-  //
+  logToSystem('Warning', err.message);
 }
 
 const client = new LumberjackClient({

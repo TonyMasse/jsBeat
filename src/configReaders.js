@@ -2,6 +2,9 @@
 const fs = require('fs');
 const path = require('path');
 
+// Load the System Logging functions
+const { logToSystem } = require('./systemLogging');
+
 // Get command line params
 let commandArgs = {}
 try {
@@ -9,7 +12,7 @@ try {
     offset: 2 // offset for removing default params of node : default 2
   })
 } catch (err) {
-  console.log('WARNING: Failed reading command lines arguments.');
+  logToSystem('Warning', 'Failed reading command lines arguments.', true);
 } finally {
   if (!commandArgs || commandArgs == null) {
     commandArgs = {};
@@ -25,6 +28,7 @@ if (commandArgs.jsBeatRoot && commandArgs.jsBeatRoot.length) {
     jsBeatRoot = commandArgs.jsBeatRoot;
   } else {
     const err = new Error(`CRITICAL: "${commandArgs.jsBeatRoot}" doesn't exist. Exiting.`);
+    logToSystem('Critical', err.message, true);
     throw(err)
   }
 }
@@ -53,7 +57,7 @@ function readMainConfig() {
     configFromFile = readConfigFromFile(configFilePath, false, false);
   } catch (err) {
     // Fails
-    console.log(err);
+    logToSystem('Warning', 'Loading config from disk failed. ' + err.message, true);
   }
 
   // Go through each possible configuration parameter, and if one is provided from file, use it
@@ -91,7 +95,7 @@ function readInputsConfig (inputsConfigFilePath, inputsConfigFilesDirectoryPath)
         if (Array.isArray(inputsFromFile)) {
           inputsArray = inputsFromFile;
         } else {
-          console.log(`WARNING: Configuration file "${inputsConfigFilePath}" didn't contain an array of Inputs. Ignoring it.`);
+          logToSystem('Warning', `Configuration file "${inputsConfigFilePath}" didn't contain an array of Inputs. Ignoring it.`, true);
         }
       }
     }
@@ -100,26 +104,28 @@ function readInputsConfig (inputsConfigFilePath, inputsConfigFilesDirectoryPath)
     if (inputsConfigFilesDirectoryPath && inputsConfigFilesDirectoryPath.length) {
       if (fs.existsSync(inputsConfigFilesDirectoryPath)) {
         // Scan the folder for config files
-        console.log(`VERBOSE: Scanning configuration directory "${inputsConfigFilesDirectoryPath}"...`);
-  
+        logToSystem('Verbose', `Scanning configuration directory "${inputsConfigFilesDirectoryPath}"...`, true);
+        logToSystem('Warning', err.message, true);
+
         // Check we are dealing with a proper directory
         let dirStats = fs.statSync(inputsConfigFilesDirectoryPath);
         if (dirStats.isDirectory()) {
           fs.readdirSync(inputsConfigFilesDirectoryPath).forEach((individualInputConfigFilePath) => {
-            console.log(`VERBOSE: Loading config from: ${individualInputConfigFilePath}...`);
+            logToSystem('Verbose', `Loading config from: ${ individualInputConfigFilePath }...`, true);
             // Read from indidual file
             const individualInputConfig = readConfigFromFile(path.join(inputsConfigFilesDirectoryPath, individualInputConfigFilePath), false, false, false, false);
             // Add it to the inputs array
             if (individualInputConfig) {
               inputsArray.push(individualInputConfig);
             }
+
           });
         } else {
-          console.log(`WARNING: "${inputsConfigFilesDirectoryPath}" is not a directory. Ignoring it.`);
+          logToSystem('Warning', `"${inputsConfigFilesDirectoryPath}" is not a directory. Ignoring it.`, true);
         }
   
       } else {
-        console.log(`WARNING: Configuration directory "${inputsConfigFilesDirectoryPath}" doesn't exist. Ignoring it.`);
+        logToSystem('Warning', `Configuration directory "${inputsConfigFilesDirectoryPath}" doesn't exist. Ignoring it.`, true);
       }
     }
     return inputsArray;
@@ -154,28 +160,31 @@ function readConfigFromFile (
   if (configFilePath && configFilePath.length) {
     if (fs.existsSync(configFilePath)) {
       // Get Inputs config
-      console.log(`VERBOSE: Reading configuration file "${configFilePath}"...`);
+      logToSystem('Verbose', `Reading configuration file "${configFilePath}"...`, true);
       try {
         configFromFile = JSON.parse(fs.readFileSync(configFilePath, 'utf8'));
       } catch (err) {
         if (exitOnParsingError === true) {
           const err = new Error(`CRITICAL: Failed parsing configuration file "${configFilePath}". Exiting.`);
+          logToSystem('Critical', err.message, true);
           throw err;
         } else {
-          console.log(`ERROR: Failed parsing configuration file "${configFilePath}".${defaultValuesOnParsingErrorMessage}`);
+          logToSystem('Error', `Failed parsing configuration file "${configFilePath}".${defaultValuesOnParsingErrorMessage}`, true);
         }
       }
     } else {
       if (exitOnFileMissing === true) {
         const err = new Error(`CRITICAL: Configuration file "${configFilePath}" doesn't exist. Exiting.`);
+        logToSystem('Critical', err.message, true);
         throw err;
       } else {
-        console.log(`WARNING: Configuration file "${configFilePath}" doesn't exist.${defaultValuesOnFileMissingMessage}`);
+        logToSystem('Warning', `Configuration file "${configFilePath}" doesn't exist.${defaultValuesOnFileMissingMessage}`, true);
       }
     }
   } else {
     if (exitOnFileMissing === true) {
       const err = new Error('CRITICAL: No file path provided. Exiting.');
+      logToSystem('Critical', err.message, true);
       throw err;
     }
   }

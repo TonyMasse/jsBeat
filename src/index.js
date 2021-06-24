@@ -2,11 +2,19 @@
 const fs = require('fs');
 const path = require('path');
 
+// Load the System Logging functions
+const { getLevelToInt, logToSystem } = require('./systemLogging');
+
 // Load the Configuration readers
 const { jsBeatRoot, commandArgs, readMainConfig, readInputsConfig } = require('./configReaders');
 
+// Load the main configuration (typically config/jsBeat.json)
 const mainConfig = readMainConfig();
 process.env.mainConfig = mainConfig;
+
+// Bring in the Log Level as an integer
+process.env.logLevel = getLevelToInt(mainConfig.logLevel);
+process.env.logForceToConsole = true; // XXXX
 
 // Storing the base directory name of the process, to be used elsewere while loading configuration and other files
 // The reason for this is that once packed, all these calls are made from the very same file, so __dirname of source 
@@ -19,6 +27,7 @@ const { FlatFileReaderTail } = require('./inputs/flatFileTail');
 const { FlatFileReader } = require('./inputs/flatFile');
 
 // Log that we are starting
+logToSystem('Information', 'Beat Started', true);
 logMessage(
   'Beat Started', // message
   'Heartbeat', // deviceType
@@ -30,7 +39,7 @@ logMessage(
 )
 // Setting up Heatbeat
 var heartBeatInterval = setInterval(function () {
-  console.log('💖 - Heartbeat');
+  logToSystem('Information', '💖 - Heartbeat', true);
   logMessage(
     'Heartbeat - 💖', // message
     'Heartbeat', // deviceType
@@ -95,19 +104,19 @@ if (inputConfig && Array.isArray(inputConfig)) {
               }
             )
           } else {
-            console.log('WARNING: Flat File Log Source definition is missing baseDirectoryPath. Skipping.');
+            logToSystem('Warning', 'Flat File Log Source definition is missing baseDirectoryPath. Skipping.', true);
           }
         } // Flat File
 
       } else {
-        console.log('WARNING: Log Source definition is missing uid. Skipping.');
+        logToSystem('Warning', 'Log Source definition is missing uid. Skipping.', true);
     }
     } else {
-      console.log('WARNING: Log Source definition is missing log_source_type. Skipping.');
+      logToSystem('Warning', 'Log Source definition is missing log_source_type. Skipping.', true);
     }
   })
 } else {
-  console.log('ERROR: inputs.json must contain an array of Log Source definitions.');
+  logToSystem('Error', 'inputs.json must contain an array of Log Source definitions.', true);
 }
 
 
@@ -138,7 +147,8 @@ if (inputConfig && Array.isArray(inputConfig)) {
 //   });
 // }
 
-console.log('Input:');
-console.log(inputs);
+// console.log('Input:', inputs);
+logToSystem('Debug', 'Input:', true);
+logToSystem('Debug', inputs, true);
 
 // console.log(commandArgs)

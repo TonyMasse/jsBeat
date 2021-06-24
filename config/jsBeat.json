@@ -5,5 +5,5 @@
   "lumberjackConfigPath": "{jsBeatRoot}/config/lumberjack.json",
   "decompressionTemporaryRootPath": "/tmp/jsBeat/decompressedFiles",
   "logFilePath": "/var/log/jsBeat",
-  "logLevel": "information"
+  "logLevel": "Debug"
 }

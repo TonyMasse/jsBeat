@@ -3,6 +3,10 @@ const fs = require('fs-extra')
 const path = require('path')
 const uuid = require('uuid-random');
 
+// Load the System Logging functions
+const { logToSystem } = require('../systemLogging');
+
+
 // This version is to use the home made algo, as the Tail is too simplistic
 // See README.md for details and progress
 
@@ -74,11 +78,11 @@ class FlatFileReader {
     this.state.fullStateFilePath = path.join(
       (
         this.config.statesBaseDirectory && this.config.statesBaseDirectory.length
-        ? this.config.statesBaseDirectory
-        : path.join(process.env.baseDirname, 'states')
+          ? this.config.statesBaseDirectory
+          : path.join(process.env.baseDirname, 'states')
       ),
       'state.' + this.config.uid + '.json'
-      );
+    );
 
     // Call use() to add the loggerFunction if already provided
     if (loggerFunction) {
@@ -174,17 +178,15 @@ class FlatFileReader {
             + ')'
             // Look for the multi-line Separator at the end, without capturing it. If none defined, use EOL
             + (this.config.multiLines && this.config.multiLines.msgDelimiterRegex !== undefined && this.config.multiLines.msgDelimiterRegex.length ? '(?:' + this.config.multiLines.msgDelimiterRegex + ')' : '[\r]{0,1}\n')
-          ;
+            ;
 
           // Load pre-existing State from disk
           loadState.call(this);
 
           // Print out configuration
-          console.log('Running configuration:');
-          console.log(this.config);
+          logToSystem('Debug', 'Running configuration: ' + JSON.stringify(this.config, null, ' '));
           // Print out state
-          console.log('Running state:');
-          console.log(this.state);
+          logToSystem('Debug', 'Running state: ' + JSON.stringify(this.state, null, ' '));
 
           if (this.config.inclusionFilterRegex && this.config.inclusionFilterRegex.length) {
             if (this.loggerFunction && typeof this.loggerFunction === 'function') {
@@ -197,27 +199,27 @@ class FlatFileReader {
                 setTimeout(collectionCycle.bind(this))
                 // collectionCycle.call(this)
               } catch (err) {
-                console.error(err);
+                logToSystem('Error', err.message);
               }
             } else {
               const err = new Error('loggerFunction must be a valid function.')
-              console.error(err);
+              logToSystem('Error', err.message);
             }
           } else {
             const err = new Error('inclusionFilter must be a non empty string.' + this.config.inclusionFilter)
-            console.error(err);
+            logToSystem('Error', err.message);
           }
         } else {
           const err = new Error('inclusionFilter must be a non empty string.' + this.config.inclusionFilter)
-          console.error(err);
+          logToSystem('Error', err.message);
         }
       } else {
         const err = new Error('baseDirectoryPath must be a non empty string.')
-        console.error(err);
+        logToSystem('Error', err.message);
       }
     } else {
       const err = new Error('uid must be a non empty string and must be unique to this log source / stream.')
-      console.error(err);
+      logToSystem('Error', err.message);
     }
   } // start
 
@@ -233,24 +235,25 @@ class FlatFileReader {
         if (this.state.hasFailedToUseLogger !== true) {
           this.state.hasFailedToUseLogger = true;
           const err = new Error('Failed to send line to Open Collector via Lumberjack.')
-          console.log('ERROR: ', err);
+          logToSystem('Error', err.message);
         }
       }
     }
   }
 }
 
-function collectionCycle() {
+function collectionCycle () {
   if (this.collectionCycleStillOngoing) {
     this.statistics.collectionCyclesSkipped++;
     this.statistics.collectionCyclesSkippedSinceLastCompleted++;
-    console.log('🔎 - Collection Cycle still ongoing... Doing nothing. (Been collecting for ' + ((Date.now() - this.currentCollectionCycleStartedAt)/1000) + ' seconds // Number of times we skipped since last complete Cycle: ' + this.statistics.collectionCyclesSkippedSinceLastCompleted + ')');
+    logToSystem('Verbose', '🔎 - Collection Cycle still ongoing... Doing nothing. (Been collecting for ' + ((Date.now() - this.currentCollectionCycleStartedAt) / 1000) + ' seconds // Number of times we skipped since last complete Cycle: ' + this.statistics.collectionCyclesSkippedSinceLastCompleted + ')');
+
   } else {
     try {
       this.collectionCycleStillOngoing = true;
       this.currentCollectionCycleStartedAt = Date.now();
       // console.log('🔎 - Start Collection Cycle!');
-      console.log('🔎 - Start Collection Cycle!');
+      logToSystem('Verbose', '🔎 - Start Collection Cycle!');
       // Let's get cracking!
       this.statistics.directoriesScanned = 0;
       this.statistics.directoriesSkipped = 0;
@@ -259,21 +262,21 @@ function collectionCycle() {
       this.statistics.entriesErrored = 0;
       crawl.call(this, this.config.baseDirectoryPath, 0);
     } catch (err) {
-      console.log(err);
+      logToSystem('Error', err.message);
     } finally {
       // Update statistics
       // First calculate the time this Cycle took, and store it in an array (of max 50 cycles) to calculate average
       const timeTakenMs = (Date.now() - this.currentCollectionCycleStartedAt);
       this.statistics.collectionCycleDurations.push(timeTakenMs);
       if (this.statistics.collectionCycleDurations.length > 0) {
-        this.statistics.collectionCycleDurationAverage = 
+        this.statistics.collectionCycleDurationAverage =
           this.statistics.collectionCycleDurations.reduce((sum, duration) => sum += duration) /
           this.statistics.collectionCycleDurations.length
       }
       // Increment the Cycle counter
       this.statistics.collectionCyclesDone++;
 
-      console.log(
+      logToSystem('Verbose',
         '🔎 - Stats: ' +
         ' // Directories Scanned: ' + this.statistics.directoriesScanned +
         ' // Directories Skipped: ' + this.statistics.directoriesSkipped +
@@ -285,14 +288,14 @@ function collectionCycle() {
       // Persist State to disk
       persistState.call(this);
 
-      console.log('🔎 - Collection Cycle finished... (Took ' + (timeTakenMs / 1000) + ' seconds // Average is ' + (this.statistics.collectionCycleDurationAverage / 1000) + ' seconds)');
+      logToSystem('Verbose', '🔎 - Collection Cycle finished... (Took ' + (timeTakenMs / 1000) + ' seconds // Average is ' + (this.statistics.collectionCycleDurationAverage / 1000) + ' seconds)');
       this.statistics.collectionCyclesSkippedSinceLastCompleted = 0;
       this.collectionCycleStillOngoing = false;
     }
   }
 }
 
-function crawl(directory, depth) {
+function crawl (directory, depth) {
   try {
     // console.log(String('').padStart(depth, ' ') + '🦔 - crawler entering directory: (' + depth + ') ' + directory);
 
@@ -311,9 +314,9 @@ function crawl(directory, depth) {
       fs.readdirSync(directory).forEach((entry) => {
         try {
           let entryFullPath = path.join(directory, entry);
-  
+
           let entryStats = fs.statSync(entryFullPath);
-  
+
           // Oh look! A sub-directory, let's stick our nose in there too.
           if (entryStats.isDirectory()) {
             // Crawl deeper... If allowed by config.recursionDepth
@@ -322,7 +325,7 @@ function crawl(directory, depth) {
             } else {
               // Out of depth
               const err = Error('Maximum recursion depth reached (' + (depth + 1) + '). Not going any deeper.');
-              // console.log(err); // This is way too frequent to log
+              // logToSystem('Error', err.message); // This is way too frequent to log
               this.statistics.directoriesSkipped++
             }
           } else if (entryStats.isFile()) {
@@ -332,7 +335,7 @@ function crawl(directory, depth) {
               if (String(entry).match(this.config.inclusionFilterRegex)) {
                 // And if it does't our exclusion Regex
                 if (!this.config.exclusionFilterRegex || (this.config.exclusionFilterRegex && !String(entry).match(this.config.exclusionFilterRegex))) {
-                  // console.log('🦔 - processing: ' + entry);
+                  // logToSystem('Verbose', '🦔 - processing: ' + entry);
                   this.statistics.filesDetected++;
                   const previousStats = this.state.positions.get(entryFullPath)
                   if (previousStats) {
@@ -341,28 +344,28 @@ function crawl(directory, depth) {
                     if (entryStats.size > previousStats.size) {
                       // The file grew since last check
                       // Let's gather new data
-                      console.log('🦔 - 🟩 - File grew (' + entryFullPath + ')');
+                      logToSystem('Verbose', '🦔 - 🟩 - File grew (' + entryFullPath + ')');
                       collectMessagesFromFile.call(this, entryFullPath, previousStats.size, entryStats.size);
                     } else if (entryStats.size < previousStats.size) {
                       // Size shrunk, indicating a fresh new content
                       // Let's gather full file content
-                      console.log('🦔 - 🟦 - New content (' + entryFullPath + ')');
+                      logToSystem('Verbose', '🦔 - 🟦 - New content (' + entryFullPath + ')');
                       collectMessagesFromFile.call(this, entryFullPath, 0, entryStats.size);
                     } else {
-                      console.log('🦔 - ⬛ - Same file (' + entryFullPath + ')');
+                      logToSystem('Verbose', '🦔 - ⬛ - Same file (' + entryFullPath + ')');
                     }
                     this.state.positions.set(entryFullPath, entryStats)
                   } else {
                     // New file
                     this.state.positions.set(entryFullPath, entryStats)
                     // Let's gather full file content
-                    console.log('🦔 - 🆕 - New file (' + entryFullPath + ')');
+                    logToSystem('Verbose', '🦔 - 🆕 - New file (' + entryFullPath + ')');
                     collectMessagesFromFile.call(this, entryFullPath, 0, entryStats.size);
                   }
                 }
               }
             } else {
-              // console.log('🦔 - 👴 - File is too old. Skipping. (' + entryFullPath + ')');
+              // logToSystem('Verbose', '🦔 - 👴 - File is too old. Skipping. (' + entryFullPath + ')');
             }
           }
 
@@ -373,24 +376,24 @@ function crawl(directory, depth) {
       })
     } else {
       const err = Error('"' + directory + '" is not a valid directory. Not crawling through it.');
-      console.log(err);
+      logToSystem('Error', err.message);
     }
 
   } catch (err) {
-    console.log(err);
+    logToSystem('Error', err.message);
   } finally {
     //
   }
 }
 
-function collectMessagesFromFile(fileFullPath, fromByte, toByte) {
+function collectMessagesFromFile (fileFullPath, fromByte, toByte) {
   if (fileFullPath && fileFullPath.length && fromByte >= 0 && toByte > fromByte) {
     try {
-      console.log('🚀 - Collect messages from file: "' + fileFullPath + '" from Byte: ' + fromByte + ' to Byte: ' + toByte);
+      logToSystem('Verbose', '🚀 - Collect messages from file: "' + fileFullPath + '" from Byte: ' + fromByte + ' to Byte: ' + toByte);
       this.statistics.filesCollected++;
       if (this.config.compressionType && this.config.compressionType.length) {
         // Handle decompression
-        console.log('🚀 - WARNING : Compression is not yet implemented.');
+        logToSystem('Verbose', '🚀 - WARNING : Compression is not yet implemented.');
       }
 
       try {
@@ -425,7 +428,7 @@ function collectMessagesFromFile(fileFullPath, fromByte, toByte) {
           bytesRead = fs.readSync(fileDescriptor, buffer, 0, bytesToRead, readFromByte);
 
           // Slice the buffer into log messages
-          
+
           const bufferAsString = buffer.toString('utf8', 0, bytesRead); // Transpose to a String the bytes received (ignoring the rest of the buffer)
           messageMathesCount = 0;
           messagePushedToOpenCollectorCount = 0;
@@ -437,7 +440,7 @@ function collectMessagesFromFile(fileFullPath, fromByte, toByte) {
               // - m: Multi-line search
               // - s: Allows . to match newline characters
               'gms'
-              );
+            );
             let messageMatches = tempLogMessageSelectionRegex.exec(bufferAsString);
             while (messageMatches) {
               messageMathesCount++;
@@ -456,7 +459,7 @@ function collectMessagesFromFile(fileFullPath, fromByte, toByte) {
                   if (this.state.hasFailedToUseLogger !== true) {
                     this.state.hasFailedToUseLogger = true;
                     const err = new Error('Failed to send line to Open Collector via Lumberjack.')
-                    console.log('ERROR: ', err);
+                    logToSystem('Error', err.message);
                   }
                 }
               }
@@ -464,7 +467,7 @@ function collectMessagesFromFile(fileFullPath, fromByte, toByte) {
               messageMatches = tempLogMessageSelectionRegex.exec(bufferAsString);
             }
           } catch (err) {
-            console.log('🚀 - 🟠 WARNING - Message parsing', err);
+            logToSystem('Warning', '🚀 - 🟠 WARNING - Message parsing - ' + err.message);
           } finally {
             //
           }
@@ -479,7 +482,7 @@ function collectMessagesFromFile(fileFullPath, fromByte, toByte) {
         }
         console.log('🚀 - 🔢🏁 - Stats // Bytes read: ' + bytesReadTotal + ' // Messages parsed: ' + messageMathesCountTotal + ' // Messages pushed to Open Collector: ' + messagePushedToOpenCollectorCountTotal);
       } catch (err) {
-        console.log(err);
+        logToSystem('Error', err.message);
       } finally {
         try {
           fs.closeSync(fileDescriptor);
@@ -494,7 +497,7 @@ function collectMessagesFromFile(fileFullPath, fromByte, toByte) {
   }
 }
 
-function loadState() {
+function loadState () {
   try {
     const stateArray = fs.readFileSync(
       this.state.fullStateFilePath,
@@ -506,11 +509,11 @@ function loadState() {
       this.state.positions = new Map(JSON.parse(stateArray));
     }
   } catch (err) {
-    console.log('Failed to load previous State for this Log Source. Reason: ', err.message);
+    logToSystem('Error', 'Failed to load previous State for this Log Source. ' + err.message);
   }
 }
 
-function persistState() {
+function persistState () {
   try {
     fs.ensureFileSync(this.state.fullStateFilePath);
     fs.writeFileSync(
@@ -522,22 +525,22 @@ function persistState() {
       }
     );
   } catch (err) {
-    console.log('Failed to persist State for this Log Source. Reason: ', err);
+    logToSystem('Error', 'Failed to persist State for this Log Source. ' + err.message);
   }
 }
 
-function pruneState() {
+function pruneState () {
   if (this.stillPruningState) {
-    console.log('🌳 - Still Pruning State. Doing nothing. (Been pruning for ' + ((Date.now() - this.currentPruningStateStartedAt) / 1000) + ' seconds)');
+    logToSystem('Verbose', '🌳 - Still Pruning State. Doing nothing. (Been pruning for ' + ((Date.now() - this.currentPruningStateStartedAt) / 1000) + ' seconds)');
   } else {
     try {
       this.stillPruningState = true;
       this.currentPruningStateStartedAt = Date.now();
-      console.log('🌳 - Start Pruning State!');
+      logToSystem('Verbose', '🌳 - Start Pruning State!');
       // Let's get cracking!
       // Code here
     } catch (err) {
-      console.log(err);
+      logToSystem('Error', err.message);
     } finally {
       this.stillPruningState = false;
     }
