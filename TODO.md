@@ -19,16 +19,16 @@
 - [x] Read Input JSON files from a directory (`config/inputs.d/*.json`)
 - [ ] Ability to write logs to `/var/log/jsBeat`
   - [ ] Update `config/README.md`
-- [ ] Clean up (limit) output STDOUT
-  - [ ] Create a Log Level global variable with one of these values
+- [x] Clean up (limit) output STDOUT
+  - [x] Create a Log Level global variable with one of these values
     - 1 - Debug
     - 2 - Verbose
     - 3 - Info
     - 4 - Warning
     - 5 - Error
     - 6 - Critical
-  - [ ] use Log Level to decide what to output
-  - [ ] Create a logging function to make all this easy
+  - [x] Use Log Level to decide what to output
+  - [x] Create a logging function to make all this easy
 - [ ] Provide SHA256 checksum with wach Release
 - [ ] Add Syslog support
   - [ ] UDP
