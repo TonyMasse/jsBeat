@@ -17,16 +17,15 @@ Overal configuraion of jsBeat.
 
 > All the fields are optional
 
-| Field | Default value | Description |
-|-------|---------------|-------------|
-| jsBeatRoot | `null` | If provided, the root of the jsBeat paths.  |
-| stateDirectoryPath | `{jsBeatRoot}/states` | Directory used to store the State of each Log Source. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. |
-| inputsConfigFilePath | `{jsBeatRoot}/config/inputs.json` | Description of one or several Log Sources. Works in addition to the definitions (if any) found in `inputsConfigFilesDirectoryPath`. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. |
-| inputsConfigFilesDirectoryPath | `{jsBeatRoot}/config/inputs.d` | Contains individual Log Source description files. Works in addition to the definitions (if any) found in `inputsConfigFilePath`. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`.  |
-| lumberjackConfigPath | `{jsBeatRoot}/config/lumberjack.json` | Parameters for the Lumberjack protocol. Defines how to connect to the Open Collector. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. |
-| decompressionTemporaryRootPath | `/tmp/jsBeat/decompressedFiles` | Temporary directory inside of which new directories will be created if needed to temporarily store decompressed files, while they get processed. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. |
-| logFilePath | `/var/log/jsBeat` | Log file of jsBeat. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. |
-| logLevel | `information` | Level of logging details. Possible values: `critical`, `error`, `warning`, `information`, `verbose`, `debug` |
+| Field | Default value | Description | Overridden by |
+|-------|---------------|-------------|---------------|
+| stateDirectoryPath | `{jsBeatRoot}/states` | Directory used to store the State of each Log Source. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. | `--stateDirectoryPath` |
+| inputsConfigFilePath | `{jsBeatRoot}/config/inputs.json` | Description of one or several Log Sources. Works in addition to the definitions (if any) found in `inputsConfigFilesDirectoryPath`. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. | `--inputsConfigFilePath` |
+| inputsConfigFilesDirectoryPath | `{jsBeatRoot}/config/inputs.d` | Contains individual Log Source description files. Works in addition to the definitions (if any) found in `inputsConfigFilePath`. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`.  | `--inputsConfigFilesDirectoryPath` |
+| lumberjackConfigPath | `{jsBeatRoot}/config/lumberjack.json` | Parameters for the Lumberjack protocol. Defines how to connect to the Open Collector. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. | `--lumberjackConfigPath` |
+| decompressionTemporaryRootPath | `/tmp/jsBeat/decompressedFiles` | Temporary directory inside of which new directories will be created if needed to temporarily store decompressed files, while they get processed. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. | `--decompressionTemporaryRootPath` |
+| logFilePath | `/var/log/jsBeat` | Log file of jsBeat. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. | `--logFilePath` |
+| logLevel | `information` | Level of logging details. Possible values: `critical`, `error`, `warning`, `information`, `verbose`, `debug` | `--logLevel` |
 
 __Example:__
 ```json

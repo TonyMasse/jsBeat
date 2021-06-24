@@ -14,6 +14,7 @@ process.env.mainConfig = mainConfig;
 
 // Bring in the Log Level as an integer
 process.env.logLevel = getLevelToInt(mainConfig.logLevel);
+process.env.logFilePath = mainConfig.logFilePath;
 process.env.logForceToConsole = true; // XXXX
 
 // Storing the base directory name of the process, to be used elsewere while loading configuration and other files
