@@ -2,10 +2,16 @@
 const fs = require('fs');
 const path = require('path');
 
+// Load the Configuration readers
+const { jsBeatRoot, commandArgs, readMainConfig, readInputsConfig } = require('./configReaders');
+
+const mainConfig = readMainConfig();
+process.env.mainConfig = mainConfig;
+
 // Storing the base directory name of the process, to be used elsewere while loading configuration and other files
 // The reason for this is that once packed, all these calls are made from the very same file, so __dirname of source 
 // files in sub-directories don't reflect the __dirname once packed.
-process.env.baseDirname = path.join(__dirname, '..');
+process.env.baseDirname = jsBeatRoot;
 
 // Load the logMessage function to push messages via Lumberjack to Open Collector
 const { logMessage } = require('./outputs/logMessage');
@@ -40,7 +46,8 @@ const inputs = [];
 const outputs = [];
 
 // Get Inputs config
-const inputConfig = JSON.parse(fs.readFileSync(path.join(process.env.baseDirname, 'config', 'inputs.json'), 'utf8'));
+// const inputConfig = JSON.parse(fs.readFileSync(path.join(process.env.baseDirname, 'config', 'inputs.json'), 'utf8'));
+const inputConfig = readInputsConfig(mainConfig.inputsConfigFilePath, mainConfig.inputsConfigFilesDirectoryPath);
 
 // Build Inputs from config
 if (inputConfig && Array.isArray(inputConfig)) {
@@ -80,7 +87,9 @@ if (inputConfig && Array.isArray(inputConfig)) {
                     flatFile: true,
                     filePath: input.baseDirectoryPath,
                     logSourceType: 'Flat File'
-                  }
+                  },
+
+                  statesBaseDirectory: mainConfig.stateDirectoryPath
                 },
                 logMessage)
               }
@@ -102,32 +111,34 @@ if (inputConfig && Array.isArray(inputConfig)) {
 }
 
 
-// Get command line params
-const commandArgs = process.argv.slice(2);
+// // Get command line params
+// const commandArgs = process.argv.slice(2);
 
-if (commandArgs && commandArgs[0] && commandArgs[0].length) {
-  console.log('Tailing: ' + commandArgs[0] + '...');
+// if (commandArgs && commandArgs[0] && commandArgs[0].length) {
+//   console.log('Tailing: ' + commandArgs[0] + '...');
 
-  const deviceType = (commandArgs[1] && commandArgs[1].length ? commandArgs[1] : undefined)
+//   const deviceType = (commandArgs[1] && commandArgs[1].length ? commandArgs[1] : undefined)
 
-  inputs.push({
-    type: 'flatFile',
-    name: deviceType || commandArgs[0],
-    handler: new FlatFileReaderTail({
-      path: commandArgs[0], // Backward compatibility with FlatFileReaderTail
-      baseDirectoryPath: commandArgs[0], // Going forward, with FlatFileReader
-      autoStart: true,
-      printToConsole: true,
-      deviceType,
-      filterHelpers: {
-        flatFile: true,
-        filePath: commandArgs[0],
-        logSourceType: 'Flat File'
-      }
-    },
-    logMessage)
-  });
-}
+//   inputs.push({
+//     type: 'flatFile',
+//     name: deviceType || commandArgs[0],
+//     handler: new FlatFileReaderTail({
+//       path: commandArgs[0], // Backward compatibility with FlatFileReaderTail
+//       baseDirectoryPath: commandArgs[0], // Going forward, with FlatFileReader
+//       autoStart: true,
+//       printToConsole: true,
+//       deviceType,
+//       filterHelpers: {
+//         flatFile: true,
+//         filePath: commandArgs[0],
+//         logSourceType: 'Flat File'
+//       }
+//     },
+//     logMessage)
+//   });
+// }
 
 console.log('Input:');
 console.log(inputs);
+
+// console.log(commandArgs)

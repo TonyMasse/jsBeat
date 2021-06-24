@@ -71,7 +71,14 @@ class FlatFileReader {
     }
 
     // Prep State file path
-    this.state.fullStateFilePath = path.join(process.env.baseDirname, 'states', 'state.' + this.config.uid + '.json');
+    this.state.fullStateFilePath = path.join(
+      (
+        this.config.statesBaseDirectory && this.config.statesBaseDirectory.length
+        ? this.config.statesBaseDirectory
+        : path.join(process.env.baseDirname, 'states')
+      ),
+      'state.' + this.config.uid + '.json'
+      );
 
     // Call use() to add the loggerFunction if already provided
     if (loggerFunction) {
@@ -499,7 +506,7 @@ function loadState() {
       this.state.positions = new Map(JSON.parse(stateArray));
     }
   } catch (err) {
-    console.log('Failed to load previous State for this Log Source. Reason: ', err);
+    console.log('Failed to load previous State for this Log Source. Reason: ', err.message);
   }
 }
 

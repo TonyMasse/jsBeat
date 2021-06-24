@@ -1,5 +1,12 @@
 # Configuration
 
+Where `{jsBeatRoot}` can be used in a path, it will be replaced by either (in decreasing order of priority):
+- the path provided by `--jsBeatRoot` via the command line, if any
+- the jsBeat root path detected at runtime
+
+> IMPORTANT
+> If the path provided by `--jsBeatRoot` via the command line doesn't exist, __jsBeat__ will exit.
+
 ## jsBeat.json (:construction: Not yet implemented)
 - Optional: yes
 - Type: JSON file
@@ -12,7 +19,7 @@ Overal configuraion of jsBeat.
 
 | Field | Default value | Description |
 |-------|---------------|-------------|
-| jsBeatRoot | `null` | If provided, the root of the jsBeat paths. `{jsBeatRoot}` can then be used in any other paths, and will be replaced by this value. If not provided `{jsBeatRoot}` will be replaced by the jsBeat root path detected at runtime. |
+| jsBeatRoot | `null` | If provided, the root of the jsBeat paths.  |
 | stateDirectoryPath | `{jsBeatRoot}/states` | Directory used to store the State of each Log Source. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. |
 | inputsConfigFilePath | `{jsBeatRoot}/config/inputs.json` | Description of one or several Log Sources. Works in addition to the definitions (if any) found in `inputsConfigFilesDirectoryPath`. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. |
 | inputsConfigFilesDirectoryPath | `{jsBeatRoot}/config/inputs.d` | Contains individual Log Source description files. Works in addition to the definitions (if any) found in `inputsConfigFilePath`. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`.  |

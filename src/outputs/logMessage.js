@@ -5,7 +5,19 @@ const os = require('os');
 const fs = require('fs');
 const path = require('path');
 
-const lumberjackConfig = JSON.parse(fs.readFileSync(path.join(process.env.baseDirname, 'config', 'lumberjack.json'), 'utf8'));
+// Bring the config file path from teh main configuration, and if not go for config/lumberjack.json
+const lumberjackConfigFilePath = (
+  process.env.mainConfig && process.env.mainConfig.lumberjackConfigPath && process.env.mainConfig.lumberjackConfigPath.length
+    ? process.env.mainConfig.lumberjackConfigPath
+    : path.join(process.env.baseDirname, 'config', 'lumberjack.json')
+);
+
+let lumberjackConfig = {};
+try {
+  lumberjackConfig = JSON.parse(fs.readFileSync(lumberjackConfigFilePath, 'utf8'));
+} catch (err) {
+  //
+}
 
 const client = new LumberjackClient({
   host: (lumberjackConfig && lumberjackConfig.host && lumberjackConfig.host.length ? lumberjackConfig.host : 'localhost'),

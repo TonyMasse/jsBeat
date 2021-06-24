@@ -12,6 +12,7 @@
   "author": "Tony Masse",
   "license": "MIT",
   "dependencies": {
+    "arguments-parser": "^2.0.2",
     "fs-extra": "^10.0.0",
     "lumberjack-client": "^1.0.3",
     "tail": "^2.2.3",

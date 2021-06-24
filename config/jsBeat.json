@@ -1,5 +1,4 @@
 {
-  "jsBeatRoot": null,
   "stateDirectoryPath": "{jsBeatRoot}/states",
   "inputsConfigFilePath": "{jsBeatRoot}/config/inputs.json",
   "inputsConfigFilesDirectoryPath": "{jsBeatRoot}/config/inputs.d",
