@@ -20,7 +20,7 @@ Overal configuraion of jsBeat.
 >
 > All the fields are optional
 
-| Field | Default value | Description | Overridden by |
+| Field | Default value | Description | Can be overridden by |
 |-------|---------------|-------------|---------------|
 | stateDirectoryPath | `{jsBeatRoot}/states` | Directory used to store the State of each Log Source. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. | `--stateDirectoryPath` |
 | inputsConfigFilePath | `{jsBeatRoot}/config/inputs.json` | Description of one or several Log Sources. Works in addition to the definitions (if any) found in `inputsConfigFilesDirectoryPath`. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. | `--inputsConfigFilePath` |
@@ -33,7 +33,6 @@ Overal configuraion of jsBeat.
 __Example:__
 ```json
 {
-  "jsBeatRoot": null,
   "stateDirectoryPath": "{jsBeatRoot}/states",
   "inputsConfigFilePath": "{jsBeatRoot}/config/inputs.json",
   "inputsConfigFilesDirectoryPath": "{jsBeatRoot}/config/inputs.d",
