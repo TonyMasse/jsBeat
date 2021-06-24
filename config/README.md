@@ -7,11 +7,11 @@ Where `{jsBeatRoot}` can be used in a path, it will be replaced by either (in de
 > IMPORTANT
 > If the path provided by `--jsBeatRoot` via the command line doesn't exist, __jsBeat__ will exit.
 
-## jsBeat.json (:construction: Not yet implemented)
+## jsBeat.json
 - Optional: yes
 - Type: JSON file
 - Default path: `{jsBeatRoot}/config/jsBeat.json`
-- Path cath can be overridden by: `--jsBeatConfigFile` via the command line. (:construction: Not yet implemented)
+- Path cath can be overridden by: `--jsBeatConfigFile` via the command line.
 
 Overal configuraion of jsBeat.
 
@@ -48,7 +48,7 @@ __Example:__
 - Type: JSON file
 - Default path: `{jsBeatRoot}/config/lumberjack.json`
 - Path can be overridden by `lumberjackConfigPath` inside of `config/jsBeat.json`.
-- Path can be overridden by `--lumberjackConfigPath` via the command line. (:construction: Not yet implemented)
+- Path can be overridden by `--lumberjackConfigPath` via the command line.
 
 Parameters for the Lumberjack protocol. Defines how to connect to the Open Collector.
 
@@ -72,7 +72,7 @@ __Example:__
 - Type: JSON file
 - Default path: `{jsBeatRoot}/config/inputs.json`
 - Path can be overridden by `inputsConfigFilePath` inside of `config/jsBeat.json`.
-- Path can be overridden by `--inputsConfigFilePath` via the command line. (:construction: Not yet implemented)
+- Path can be overridden by `--inputsConfigFilePath` via the command line.
 
 Description of one or several Log Sources. Works in addition to the definitions (if any) found in `{jsBeatRoot}/config/inputs.d/`.
 
@@ -137,12 +137,12 @@ __Example:__
 ]
 ```
 
-## inputs.d/ (:construction: Not yet implemented)
+## inputs.d/
 - Optional: yes
 - Type: Directory
 - Default path: `{jsBeatRoot}/config/inputs.d/`
 - Path can be overridden by `inputsConfigFilesDirectoryPath` inside of `config/jsBeat.json`.
-- Path can be overridden by `--inputsConfigFilesDirectoryPath` via the command line. (:construction: Not yet implemented)
+- Path can be overridden by `--inputsConfigFilesDirectoryPath` via the command line.
 
 Contains individual Log Source description files. Works in addition to the definitions (if any) found in {jsBeatRoot}/config/inputs.json`.
 
