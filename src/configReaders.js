@@ -94,6 +94,7 @@ function readInputsConfig (inputsConfigFilePath, inputsConfigFilesDirectoryPath)
         // Checking config file contains an array.
         if (Array.isArray(inputsFromFile)) {
           inputsArray = inputsFromFile;
+          logToSystem('Information', `Found ${inputsFromFile.length} Inputs definitions in configuration file "${inputsConfigFilePath}".`, true);
         } else {
           logToSystem('Warning', `Configuration file "${inputsConfigFilePath}" didn't contain an array of Inputs. Ignoring it.`, true);
         }
@@ -105,7 +106,7 @@ function readInputsConfig (inputsConfigFilePath, inputsConfigFilesDirectoryPath)
       if (fs.existsSync(inputsConfigFilesDirectoryPath)) {
         // Scan the folder for config files
         logToSystem('Verbose', `Scanning configuration directory "${inputsConfigFilesDirectoryPath}"...`, true);
-        logToSystem('Warning', err.message, true);
+        let individualInputsCounter = 0;
 
         // Check we are dealing with a proper directory
         let dirStats = fs.statSync(inputsConfigFilesDirectoryPath);
@@ -117,20 +118,21 @@ function readInputsConfig (inputsConfigFilePath, inputsConfigFilesDirectoryPath)
             // Add it to the inputs array
             if (individualInputConfig) {
               inputsArray.push(individualInputConfig);
+              individualInputsCounter++;
             }
 
           });
         } else {
           logToSystem('Warning', `"${inputsConfigFilesDirectoryPath}" is not a directory. Ignoring it.`, true);
         }
-  
+        logToSystem('Information', `Found ${individualInputsCounter} Inputs definitions in configuration diretory "${inputsConfigFilesDirectoryPath}".`, true);
       } else {
         logToSystem('Warning', `Configuration directory "${inputsConfigFilesDirectoryPath}" doesn't exist. Ignoring it.`, true);
       }
     }
     return inputsArray;
   } catch (err) {
-    // fails silently
+    logToSystem('Error', err.message, true);
     return undefined
   }
 }
