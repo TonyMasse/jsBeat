@@ -29,7 +29,7 @@
     - 6 - Critical
   - [x] Use Log Level to decide what to output
   - [x] Create a logging function to make all this easy
-- [ ] Flat file - Ability to NOT collect from the beginning
+- [x] Flat file - Ability to NOT collect from the beginning
 - [ ] Flat file - Handle compressed files
   - [ ] Decompress in `/tmp/some_sub_directory/log_source_specific_folder/flat_file_specific_folder`
   - [ ] Crawl for each decompressed file(s)
