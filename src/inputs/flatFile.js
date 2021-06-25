@@ -301,6 +301,8 @@ function collectionCycle () {
 
       logToSystem('Verbose', '🔎 - Collection Cycle finished... (Took ' + (timeTakenMs / 1000) + ' seconds // Average is ' + (this.statistics.collectionCycleDurationAverage / 1000) + ' seconds)');
       this.statistics.collectionCyclesSkippedSinceLastCompleted = 0;
+      // First cycle now done, let's reset state.collectFromBeginning to false
+      this.state.collectFromBeginning = false;
       this.collectionCycleStillOngoing = false;
     }
   }

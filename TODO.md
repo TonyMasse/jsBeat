@@ -47,5 +47,9 @@
 :hole:
 
 ## TO TEST
-:hole:
+- [x] Use General JSON configuration file to store
+- [x] Ability to specify config files via command line
+- [x] Read Input JSON files from a directory
+- [x] Flat file - Ability to NOT collect from the beginning
+
 

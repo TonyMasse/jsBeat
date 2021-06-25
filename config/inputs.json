@@ -20,7 +20,7 @@
       "msgDelimiterRegex": ""
     },
     "frequency_in_seconds": 5,
-    "collectFromBeginning": true,
+    "collectFromBeginning": false,
     "printToConsole": false
   },
   {
