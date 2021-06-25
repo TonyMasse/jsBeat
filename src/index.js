@@ -78,6 +78,7 @@ if (inputConfig && Array.isArray(inputConfig)) {
                 // handler: new FlatFileReaderTail({
                 handler: new FlatFileReader({
                   uid: input.uid,
+                  name: input.name,
                   path: input.baseDirectoryPath, // Backward compatibility with FlatFileReaderTail
                   baseDirectoryPath: input.baseDirectoryPath, // Going forward, with FlatFileReader
                   inclusionFilter: input.inclusionFilter || '*',
@@ -87,6 +88,7 @@ if (inputConfig && Array.isArray(inputConfig)) {
                   compressionType: input.compressionType,
                   multiLines: input.multiLines,
                   frequency_in_seconds: input.frequency_in_seconds,
+                  collectFromBeginning: input.collectFromBeginning,
 
                   autoStart: true,
                   printToConsole: input.printToConsole || input.printOnlyToConsole,

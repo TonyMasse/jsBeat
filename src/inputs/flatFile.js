@@ -26,6 +26,8 @@ class FlatFileReader {
     //   - msgStartRegex: string. Inclusing Regex to match the beginning of a new message.
     //   - msgStopRegex: string. Inclusing Regex to match the end of a message.
     //   - msgDelimiterRegex: string. Excluding Regex to separate two messages.
+    // - collectFromBeginning: boolean. If set to true, the first collection cycle will collect from the beginning. Otherwise, the first cycle only collect file size and update the State.
+    // - frequency_in_seconds: number. Collect cycle frequency. Default to 30 seconds if not provided or below 0.
     // - autoStart: boolean. If false, it will only create the object and wait for start() to be called. Otherwise (default) it will try to start capturing the data immediately.
     // - printToConsole: boolean. If true, it will print out to the Console, as well as to the Open Collector.
     // - sendToOpenCollector: boolean. If true, will push to Open Collector via Lumberjack.
@@ -41,7 +43,8 @@ class FlatFileReader {
         stillPruningState: false, // Are we still Pruning?
         currentPruningStateStartedAt: 0,
         positions: new Map(), // File position and other stats
-        fullStateFilePath: '' // Is defined a few lines of code further, as it requires a valid UID
+        fullStateFilePath: '', // Is defined a few lines of code further, as it requires a valid UID
+        collectFromBeginning: false // Are we collecting from the beginning of new files?
       },
       statistics: {
         directoriesScanned: 0, // Directories we crawled into
@@ -182,6 +185,14 @@ class FlatFileReader {
 
           // Load pre-existing State from disk
           loadState.call(this);
+
+          // Confirm if we need to start collecting from the beginning
+          if (this.config.collectFromBeginning === true && this.state.positions.size <= 0) {
+            // Config says so, and there is no position state for this Log Source,
+            // so we assume it has never ran, or has ran but never collected anything
+            // Thus we confirm we should collect from the beginning
+            this.state.collectFromBeginning = true;
+          }
 
           // Print out configuration
           logToSystem('Debug', 'Running configuration: ' + JSON.stringify(this.config, null, ' '));
@@ -333,7 +344,7 @@ function crawl (directory, depth) {
             if (!this.config.daysToWatchModifiedFiles || ((this.config.daysToWatchModifiedFiles > 0) && (entryStats.mtimeMs > oldestAllowedFileTimeStamp))) { // Days to watch modified files
               // Check if file matches the inclusing Regex
               if (String(entry).match(this.config.inclusionFilterRegex)) {
-                // And if it does't our exclusion Regex
+                // And if it doesn't our exclusion Regex
                 if (!this.config.exclusionFilterRegex || (this.config.exclusionFilterRegex && !String(entry).match(this.config.exclusionFilterRegex))) {
                   // logToSystem('Verbose', '🦔 - processing: ' + entry);
                   this.statistics.filesDetected++;
@@ -358,9 +369,13 @@ function crawl (directory, depth) {
                   } else {
                     // New file
                     this.state.positions.set(entryFullPath, entryStats)
-                    // Let's gather full file content
+                    // Let's gather full file content, only if state.collectFromBeginning is true
                     logToSystem('Verbose', '🦔 - 🆕 - New file (' + entryFullPath + ')');
-                    collectMessagesFromFile.call(this, entryFullPath, 0, entryStats.size);
+                    if (this.state.collectFromBeginning) {
+                      collectMessagesFromFile.call(this, entryFullPath, 0, entryStats.size);
+                    } else {
+                      logToSystem('Verbose', '🦔 - 🆕 - Not collecting, just recording stats (position), as collectFromBeginning is set to false.');
+                    }
                   }
                 }
               }
