@@ -37,6 +37,7 @@
     - [ ] Read decompressed file
     - [ ] Delete decompressed file
   - [ ] Delete `/tmp/some_sub_directory/log_source_specific_folder/flat_file_specific_folder`
+- [ ] Flat file - Send collection stats to Open Collector
 - [ ] Add Syslog support
   - [ ] UDP
   - [ ] TCP
@@ -51,5 +52,3 @@
 - [x] Ability to specify config files via command line
 - [x] Read Input JSON files from a directory
 - [x] Flat file - Ability to NOT collect from the beginning
-
-
