@@ -1,4 +1,4 @@
-![logo](medias/logo-128w.png)
+![banner](medias/banner-readme-800.png)
 # jsBeat
 
 > A light, Javascript based, Beat to collect data for the Open Collector.
