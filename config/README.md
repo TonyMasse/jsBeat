@@ -82,36 +82,40 @@ Description of one or several Log Sources. Works in addition to the definitions 
 It is formatted as an array of objects, each containing some of the following parameters:
 
 
-Compulsory fields (🟡):
+Compulsory fields for all Log Sources (🟠):
 - `log_source_type`
 - `uid`
+
+Compulsory fields for Flat File (🟣), when `log_source_type` = `flatFile`:
 - `baseDirectoryPath`
 - `inclusionFilter`
 
-Strongly advised (🔵):
+Strongly advised (🔵), as they are used by the __JQ Filter__ of the __Open Collector__:
 - `device_type`
 - `filter_helpers`
 
+All the other fields are optional (⚫)
+
 | | Field | Type | Description |
 |-|-------|------|-------------|
-|🟡| `log_source_type` | string | One of the supported log source type: `flatFile` or `syslog`. |
-|🟡| `uid` | string | UID of the Log Source / data stream. If none provided, one will be generated. |
-|| `name` | string | Optional user friendly name for the Log Source / data stream. |
-|🟡| `baseDirectoryPath` | string | Full Base directory path to crawl to find the files matching inclusionFilter. Must be non-empty. |
-|🟡| `inclusionFilter` | string | If prefixed with "Regex::" then regex filter, otherwise file system type filter. Must be non-empty. |
-|| `exclusionFilter` | string | If prefixed with "Regex::" then regex filter, otherwise file system type filter. |
-|| `recursionDepth` | number | Maximum number of sub-directory to crawl into. |
-|| `daysToWatchModifiedFiles` | number | Stop checking for update/growth files older than X days old. 0 means disabled (all files are checked) |
-|| `compressionType` | string | Contains one of the compression format. |
-|| `multiLines` | object | Branches: |
-|| - `msgStartRegex` | string | Inclusing Regex to match the beginning of a new message. |
-|| - `msgStopRegex` | string | Inclusing Regex to match the end of a message. |
-|| - `msgDelimiterRegex` | string | Excluding Regex to separate two messages. |
-|| `collectFromBeginning` | boolean | If set to true, the first collection cycle will collect from the beginning. Otherwise, the first cycle only collect file size and update the State.
-|| `frequency_in_seconds` | number | Collect cycle frequency. Default to 30 seconds if not provided or below 0. |
-|| `autoStart` | boolean | If false, it will only create the object and wait for start() to be called. Otherwise (default) it will try to start capturing the data immediately.
-|| `printToConsole` | boolean | If true, it will print out to the Console, as well as to the Open Collector. |
-|| `sendToOpenCollector` | boolean | If true, will push to Open Collector via Lumberjack. |
+|🟠| `log_source_type` | string | One of the supported log source type: `flatFile` or `syslog`. |
+|🟠| `uid` | string | UID of the Log Source / data stream. If none provided, one will be generated. |
+|⚫| `name` | string | Optional user friendly name for the Log Source / data stream. |
+|🟣| `baseDirectoryPath` | string | Full Base directory path to crawl to find the files matching inclusionFilter. Must be non-empty. |
+|🟣| `inclusionFilter` | string | If prefixed with "Regex::" then regex filter, otherwise file system type filter. Must be non-empty. |
+|⚫| `exclusionFilter` | string | If prefixed with "Regex::" then regex filter, otherwise file system type filter. |
+|⚫| `recursionDepth` | number | Maximum number of sub-directory to crawl into. |
+|⚫| `daysToWatchModifiedFiles` | number | Stop checking for update/growth files older than X days old. 0 means disabled (all files are checked) |
+|⚫| `compressionType` | string | Contains one of the compression format. |
+|⚫| `multiLines` | object | Branches: `msgStartRegex`, `msgStopRegex` and `msgDelimiterRegex` |
+|⚫| - `msgStartRegex` | string | Inclusing Regex to match the beginning of a new message. |
+|⚫| - `msgStopRegex` | string | Inclusing Regex to match the end of a message. |
+|⚫| - `msgDelimiterRegex` | string | Excluding Regex to separate two messages. |
+|⚫| `collectFromBeginning` | boolean | If set to true, the first collection cycle will collect from the beginning. Otherwise, the first cycle only collect file size and update the State.
+|⚫| `frequency_in_seconds` | number | Collect cycle frequency. Default to 30 seconds if not provided or below 0. |
+|⚫| `autoStart` | boolean | If false, it will only create the object and wait for start() to be called. Otherwise (default) it will try to start capturing the data immediately.
+|⚫| `printToConsole` | boolean | If true, it will print out to the Console, as well as to the Open Collector. |
+|⚫| `sendToOpenCollector` | boolean | If true, will push to Open Collector via Lumberjack. |
 |🔵| `deviceType` | string | The name of the Device Type, to pass onto the Open Collector Pipeline. |
 |🔵| `filterHelpers` | object | A set of flags/strings/objects to help the JQ filter of the Open Collector Pipeline to trigger on. |
 
