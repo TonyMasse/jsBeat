@@ -48,7 +48,6 @@ function getIntToLevel(level) {
 }
 
 function openStream(logFilePath) {
-  console.log('openStream() - typeof logStream: ' + typeof logStream);
   if (logStream !== undefined) {
     try {
       logStream.end();
