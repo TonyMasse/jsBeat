@@ -77,7 +77,7 @@ __Example:__
 - Path can be overridden by `inputsConfigFilePath` inside of `config/jsBeat.json`.
 - Path can be overridden by `--inputsConfigFilePath` via the command line.
 
-Description of one or several Log Sources. Works in addition to the definitions (if any) found in `{jsBeatRoot}/config/inputs.d/`.
+Description of one or several Log Sources. Works in addition to the definitions (if any) found in `{jsBeatRoot}/config/inputs.d/`. See [inputs.d/](#inputsd) section for more details.
 
 It is formatted as an array of objects, each containing some of the following parameters:
 
@@ -178,7 +178,7 @@ __Example:__
 - Path can be overridden by `inputsConfigFilesDirectoryPath` inside of `config/jsBeat.json`.
 - Path can be overridden by `--inputsConfigFilesDirectoryPath` via the command line.
 
-Contains individual Log Source description files. Works in addition to the definitions (if any) found in {jsBeatRoot}/config/inputs.json`. See [input.json](#inputsjson) section for more details.
+Contains individual Log Source description files. Works in addition to the definitions (if any) found in {jsBeatRoot}/config/inputs.json`. See [inputs.json](#inputsjson) section for more details.
 
 Compulsory fields:
 - `log_source_type`
