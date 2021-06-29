@@ -27,7 +27,7 @@ class FlatFileReader {
     //   - msgStopRegex: string. Inclusing Regex to match the end of a message.
     //   - msgDelimiterRegex: string. Excluding Regex to separate two messages.
     // - collectFromBeginning: boolean. If set to true, the first collection cycle will collect from the beginning. Otherwise, the first cycle only collect file size and update the State.
-    // - frequency_in_seconds: number. Collect cycle frequency. Default to 30 seconds if not provided or below 0.
+    // - frequencyInSeconds: number. Collect cycle frequency. Default to 30 seconds if not provided or below 0.
     // - autoStart: boolean. If false, it will only create the object and wait for start() to be called. Otherwise (default) it will try to start capturing the data immediately.
     // - printToConsole: boolean. If true, it will print out to the Console, as well as to the Open Collector.
     // - sendToOpenCollector: boolean. If true, will push to Open Collector via Lumberjack.
@@ -67,9 +67,9 @@ class FlatFileReader {
       this.config.uid = uuid();
     }
 
-    // Set frequency_in_seconds to 30 seconds by default
-    if (!this.config.frequency_in_seconds || (this.config.frequency_in_seconds && this.config.frequency_in_seconds <= 0)) {
-      this.config.frequency_in_seconds = 30;
+    // Set frequencyInSeconds to 30 seconds by default
+    if (!this.config.frequencyInSeconds || (this.config.frequencyInSeconds && this.config.frequencyInSeconds <= 0)) {
+      this.config.frequencyInSeconds = 30;
     }
 
     // Set recursionDepth to 5 by default
@@ -205,7 +205,7 @@ class FlatFileReader {
                 // Schedule State Pruning
                 this.pruningStateInterval = setInterval(pruneState.bind(this), 86400000); // Daily
                 // Schedule Crawling Cycle
-                this.collectionCycleInterval = setInterval(collectionCycle.bind(this), this.config.frequency_in_seconds * 1000);
+                this.collectionCycleInterval = setInterval(collectionCycle.bind(this), this.config.frequencyInSeconds * 1000);
                 // Start first Crawling Cycle
                 setTimeout(collectionCycle.bind(this))
                 // collectionCycle.call(this)

@@ -91,8 +91,8 @@ Compulsory fields for Flat File (🟣), when `log_source_type` = `flatFile`:
 - `inclusionFilter`
 
 Strongly advised (🔵), as they are used by the __JQ Filter__ of the __Open Collector__:
-- `device_type`
-- `filter_helpers`
+- `deviceType`
+- `filterHelpers`
 
 All the other fields are optional (⚫)
 
@@ -112,7 +112,7 @@ All the other fields are optional (⚫)
 |⚫| - `msgStopRegex` | string | Inclusing Regex to match the end of a message. |
 |⚫| - `msgDelimiterRegex` | string | Excluding Regex to separate two messages. |
 |⚫| `collectFromBeginning` | boolean | If set to true, the first collection cycle will collect from the beginning. Otherwise, the first cycle only collect file size and update the State.
-|⚫| `frequency_in_seconds` | number | Collect cycle frequency. Default to 30 seconds if not provided or below 0. |
+|⚫| `frequencyInSeconds` | number | Collect cycle frequency. Default to 30 seconds if not provided or below 0. |
 |⚫| `autoStart` | boolean | If false, it will only create the object and wait for start() to be called. Otherwise (default) it will try to start capturing the data immediately.
 |⚫| `printToConsole` | boolean | If true, it will print out to the Console, as well as to the Open Collector. |
 |⚫| `sendToOpenCollector` | boolean | If true, will push to Open Collector via Lumberjack. |
@@ -127,8 +127,8 @@ __Example:__
     "log_source_type": "flatFile",
     "uid": "ef480e69-5c1b-4d8f-8144-7d51c765f1ee",
     "name": "Firewalld logs",
-    "device_type": "firewalld",
-    "filter_helpers": {
+    "deviceType": "firewalld",
+    "filterHelpers": {
       "boggus_test_file": false,
       "firewalld": true
     },
@@ -143,15 +143,15 @@ __Example:__
       "msgStopRegex": "",
       "msgDelimiterRegex": ""
     },
-    "frequency_in_seconds": 10,
+    "frequencyInSeconds": 10,
     "printToConsole": false
   },
   {
     "log_source_type": "flatFile",
     "uid": "b2d5912d-e842-4689-b7fe-1c6a452d1002",
     "name": "System wide Messages",
-    "device_type": "system_messages",
-    "filter_helpers": {
+    "deviceType": "system_messages",
+    "filterHelpers": {
       "System_Messages": true
     },
     "baseDirectoryPath": "/var/log",
@@ -165,7 +165,7 @@ __Example:__
       "msgStopRegex": "",
       "msgDelimiterRegex": ""
     },
-    "frequency_in_seconds": 5,
+    "frequencyInSeconds": 5,
     "printToConsole": false
   }
 ]
@@ -187,8 +187,8 @@ Compulsory fields:
 - `inclusionFilter`
 
 Strongly advised:
-- `device_type`
-- `filter_helpers`
+- `deviceType`
+- `filterHelpers`
 
 __Examples:__
 - `{jsBeatRoot}/config/inputs.d/firewalld.json`
@@ -197,8 +197,8 @@ __Examples:__
   "log_source_type": "flatFile",
   "uid": "d6a5a53f-51d7-4324-8920-377e07f754ed",
   "name": "Firewalld logs",
-  "device_type": "firewalld",
-  "filter_helpers": {
+  "deviceType": "firewalld",
+  "filterHelpers": {
     "boggus_test_file": false,
     "firewalld": true
   },
@@ -213,7 +213,7 @@ __Examples:__
     "msgStopRegex": "",
     "msgDelimiterRegex": ""
   },
-  "frequency_in_seconds": 10,
+  "frequencyInSeconds": 10,
   "printToConsole": false
 }
 ```
@@ -224,8 +224,8 @@ __Examples:__
   "log_source_type": "flatFile",
   "uid": "f114e094-4a21-414c-bcd6-7456a5e1e75a",
   "name": "System wide Messages",
-  "device_type": "system_messages",
-  "filter_helpers": {
+  "deviceType": "system_messages",
+  "filterHelpers": {
     "System_Messages": true
   },
   "baseDirectoryPath": "/var/log",

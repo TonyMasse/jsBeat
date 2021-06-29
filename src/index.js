@@ -70,7 +70,7 @@ if (inputConfig && Array.isArray(inputConfig)) {
         // Flat File
         if (logSourceTypeLowerCase === 'flatfile') {
           if (input.baseDirectoryPath && input.baseDirectoryPath.length) {
-            const deviceType = (input.device_type && input.device_type.length ? input.device_type : undefined)
+            const deviceType = (input.deviceType && input.deviceType.length ? input.deviceType : undefined)
             inputs.push(
               {
                 type: 'flatFile',
@@ -87,7 +87,7 @@ if (inputConfig && Array.isArray(inputConfig)) {
                   daysToWatchModifiedFiles: input.daysToWatchModifiedFiles,
                   compressionType: input.compressionType,
                   multiLines: input.multiLines,
-                  frequency_in_seconds: input.frequency_in_seconds,
+                  frequencyInSeconds: input.frequencyInSeconds,
                   collectFromBeginning: input.collectFromBeginning,
 
                   autoStart: true,
@@ -95,7 +95,7 @@ if (inputConfig && Array.isArray(inputConfig)) {
                   sendToOpenCollector: !(input.printOnlyToConsole === true),
                   deviceType,
                   filterHelpers: {
-                    ...input.filter_helpers,
+                    ...input.filterHelpers,
                     flatFile: true,
                     filePath: input.baseDirectoryPath,
                     logSourceType: 'Flat File'

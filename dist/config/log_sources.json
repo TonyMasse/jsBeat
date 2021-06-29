@@ -3,8 +3,8 @@
     "log_source_type": "flatFile ** DISABLED",
     "uid": "7d51c765-5c1b-4d8f-8144-ef480e69f1ee",
     "name": "Test logs",
-    "device_type": "test_dummy",
-    "filter_helpers": {
+    "deviceType": "test_dummy",
+    "filterHelpers": {
       "boggus_test_file": true,
       "firewalld": true
     },
@@ -19,15 +19,15 @@
       "msgStopRegex": "",
       "msgDelimiterRegex": ""
     },
-    "frequency_in_seconds": 5,
+    "frequencyInSeconds": 5,
     "printToConsole": false
   },
   {
     "log_source_type": "flatFile ** DISABLED",
     "uid": "bogguse69-5c1b-4d8f-8144-7d51c765f1ee",
     "name": "Fake Firewalld logs - WILL FAIL as we are providing a file instead of a directory under baseDirectoryPath",
-    "device_type": "test_firewalld",
-    "filter_helpers": {
+    "deviceType": "test_firewalld",
+    "filterHelpers": {
       "boggus_test_file": true,
       "firewalld": true
     },
@@ -42,15 +42,15 @@
       "msgStopRegex": "",
       "msgDelimiterRegex": ""
     },
-    "frequency_in_seconds": 5,
+    "frequencyInSeconds": 5,
     "printToConsole": false
   },
   {
     "log_source_type": "flatFile ** DIABLED",
     "uid": "ef480e69-5c1b-4d8f-8144-7d51c765f1ee",
     "name": "Fake Firewalld logs",
-    "device_type": "test_firewalld",
-    "filter_helpers": {
+    "deviceType": "test_firewalld",
+    "filterHelpers": {
       "boggus_test_file": true,
       "firewalld": true
     },
@@ -65,15 +65,15 @@
       "msgStopRegex": "",
       "msgDelimiterRegex": ""
     },
-    "frequency_in_seconds": 5,
+    "frequencyInSeconds": 5,
     "printToConsole": false
   },
   {
     "log_source_type": "flatFile *** Valid Example ********** COMMENTED OUT ************",
     "uid": "__CHANGE_ME__-4fdd-bed5-1b1f2601adae",
     "name": "System wide Messages",
-    "device_type": "system_messages",
-    "filter_helpers": {
+    "deviceType": "system_messages",
+    "filterHelpers": {
       "System_Messages": true
     },
     "baseDirectoryPath": "/var/log",
@@ -87,7 +87,7 @@
       "msgStopRegex": "",
       "msgDelimiterRegex": ""
     },
-    "frequency_in_seconds": 5,
+    "frequencyInSeconds": 5,
     "printToConsole": false
   }
 ]
