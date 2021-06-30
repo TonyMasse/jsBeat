@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon --ignore states/ src/index.js",
+    "dev": "nodemon --ignore states/ --ignore dist/ src/index.js",
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
