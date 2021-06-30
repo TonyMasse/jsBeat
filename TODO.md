@@ -43,7 +43,7 @@
   - [ ] TCP
     - [ ] Secure Syslog
 - [ ] Provide SHA256 checksum with wach Release
-- [ ] Add `Active` parameter to the Input config files, and ignore any Input where `Active` is not `true`
+- [x] Add `Active` parameter to the Input config files, and ignore any Input where `Active` is not `true`
 
 ## TO FIX
 :hole:
