@@ -1,7 +1,8 @@
 [
   {
-    "log_source_type": "flatFile ** DISABLED",
-    "uid": "7d51c765-5c1b-4d8f-8144-ef480e69f1ee",
+    "active": false,
+    "log_source_type": "flatFile",
+    "uid": "__CHANGE_ME__-4d8f-8144-ef480e69f1ee",
     "name": "Test logs",
     "deviceType": "test_dummy",
     "filterHelpers": {
@@ -20,11 +21,13 @@
       "msgDelimiterRegex": ""
     },
     "frequencyInSeconds": 5,
+    "collectFromBeginning": false,
     "printToConsole": false
   },
   {
-    "log_source_type": "flatFile ** DISABLED",
-    "uid": "bogguse69-5c1b-4d8f-8144-7d51c765f1ee",
+    "active": false,
+    "log_source_type": "flatFile",
+    "uid": "__CHANGE_ME__-4d8f-8144-7e51c765f1ee",
     "name": "Fake Firewalld logs - WILL FAIL as we are providing a file instead of a directory under baseDirectoryPath",
     "deviceType": "test_firewalld",
     "filterHelpers": {
@@ -43,11 +46,13 @@
       "msgDelimiterRegex": ""
     },
     "frequencyInSeconds": 5,
+    "collectFromBeginning": false,
     "printToConsole": false
   },
   {
-    "log_source_type": "flatFile ** DIABLED",
-    "uid": "ef480e69-5c1b-4d8f-8144-7d51c765f1ee",
+    "active": false,
+    "log_source_type": "flatFile",
+    "uid": "__CHANGE_ME__-4d8f-8144-7d51c765f1ee",
     "name": "Fake Firewalld logs",
     "deviceType": "test_firewalld",
     "filterHelpers": {
@@ -66,10 +71,12 @@
       "msgDelimiterRegex": ""
     },
     "frequencyInSeconds": 5,
+    "collectFromBeginning": true,
     "printToConsole": false
   },
   {
-    "log_source_type": "flatFile *** Valid Example ********** COMMENTED OUT ************",
+    "active": false,
+    "log_source_type": "flatFile",
     "uid": "__CHANGE_ME__-4fdd-bed5-1b1f2601adae",
     "name": "System wide Messages",
     "deviceType": "system_messages",

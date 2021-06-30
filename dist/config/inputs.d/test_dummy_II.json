@@ -1,0 +1,14 @@
+{
+  "active": false,
+  "log_source_type": "flatFile",
+  "uid": "__CHANGE_ME__-46e4-b31e-d0ba1aec2cd9",
+  "name": "Test logs - The Return",
+  "deviceType": "test_dummy_2",
+  "filterHelpers": {
+    "boggus_test_file": true,
+    "dummy": true
+  },
+  "baseDirectoryPath": "/tmp",
+  "inclusionFilter": "dummy.log",
+  "recursionDepth": 0
+}
