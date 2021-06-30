@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon --ignore states/ --ignore dist/ src/index.js",
-    "build": "webpack",
+    "build": "webpack ; echo -e \"\" ; mv dist jsBeat-1.1.0 ; tar cfvz jsBeat-1.1.0.tgz jsBeat-1.1.0/* ; echo -e \"\" ; mv jsBeat-1.1.0 dist ; sha256sum jsBeat-1.1.0.tgz > jsBeat-1.1.0.tgz.sha256 ; cat jsBeat-1.1.0.tgz.sha256 ; echo -e \"\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Tony Masse",
