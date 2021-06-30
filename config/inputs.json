@@ -1,5 +1,6 @@
 [
   {
+    "active": true,
     "log_source_type": "flatFile",
     "uid": "7d51c765-5c1b-4d8f-8144-ef480e69f1ee",
     "name": "Test logs",
@@ -24,7 +25,8 @@
     "printToConsole": false
   },
   {
-    "log_source_type": "flatFile ** DISABLED",
+    "active": false,
+    "log_source_type": "flatFile",
     "uid": "bogguse69-5c1b-4d8f-8144-7d51c765f1ee",
     "name": "Fake Firewalld logs - WILL FAIL as we are providing a file instead of a directory under baseDirectoryPath",
     "deviceType": "test_firewalld",
@@ -47,6 +49,7 @@
     "printToConsole": false
   },
   {
+    "active": true,
     "log_source_type": "flatFile",
     "uid": "ef480e69-5c1b-4d8f-8144-7d51c765f1ee",
     "name": "Fake Firewalld logs",
@@ -71,7 +74,8 @@
     "printToConsole": false
   },
   {
-    "log_source_type": "flatFile *** Valid Example ********** COMMENTED OUT ************",
+    "active": false,
+    "log_source_type": "flatFile",
     "uid": "__CHANGE_ME__-4fdd-bed5-1b1f2601adae",
     "name": "System wide Messages",
     "deviceType": "system_messages",
@@ -94,6 +98,7 @@
     "printToConsole": false
   },
   {
+    "active": false,
     "log_source_type": "restApi *** Maybe ********** COMMENTED OUT ************",
     "uid": "__CHANGE_ME__-4e71-9922-cce300424548",
     "deviceType": "",

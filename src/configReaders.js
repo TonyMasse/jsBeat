@@ -93,8 +93,8 @@ function readInputsConfig (inputsConfigFilePath, inputsConfigFilesDirectoryPath)
       if (inputsFromFile) {
         // Checking config file contains an array.
         if (Array.isArray(inputsFromFile)) {
-          inputsArray = inputsFromFile;
-          logToSystem('Information', `Found ${inputsFromFile.length} Inputs definitions in configuration file "${inputsConfigFilePath}".`, true);
+          inputsArray = inputsFromFile.filter(iff => iff.active === true);
+          logToSystem('Information', `Found ${inputsFromFile.length} Inputs definitions in configuration file "${inputsConfigFilePath}". Of which ${inputsArray.length} is/are Active.`, true);
         } else {
           logToSystem('Warning', `Configuration file "${inputsConfigFilePath}" didn't contain an array of Inputs. Ignoring it.`, true);
         }
@@ -107,6 +107,7 @@ function readInputsConfig (inputsConfigFilePath, inputsConfigFilesDirectoryPath)
         // Scan the folder for config files
         logToSystem('Verbose', `Scanning configuration directory "${inputsConfigFilesDirectoryPath}"...`, true);
         let individualInputsCounter = 0;
+        let individualActiveInputsCounter = 0;
 
         // Check we are dealing with a proper directory
         let dirStats = fs.statSync(inputsConfigFilesDirectoryPath);
@@ -117,15 +118,18 @@ function readInputsConfig (inputsConfigFilePath, inputsConfigFilesDirectoryPath)
             const individualInputConfig = readConfigFromFile(path.join(inputsConfigFilesDirectoryPath, individualInputConfigFilePath), false, false, false, false);
             // Add it to the inputs array
             if (individualInputConfig) {
-              inputsArray.push(individualInputConfig);
               individualInputsCounter++;
+              if (individualInputConfig.active === true) {
+                inputsArray.push(individualInputConfig);
+                individualActiveInputsCounter++;
+              }
             }
 
           });
         } else {
           logToSystem('Warning', `"${inputsConfigFilesDirectoryPath}" is not a directory. Ignoring it.`, true);
         }
-        logToSystem('Information', `Found ${individualInputsCounter} Inputs definitions in configuration diretory "${inputsConfigFilesDirectoryPath}".`, true);
+        logToSystem('Information', `Found ${individualInputsCounter} Inputs definitions in configuration diretory "${inputsConfigFilesDirectoryPath}". Of which ${individualActiveInputsCounter} is/are Active.`, true);
       } else {
         logToSystem('Warning', `Configuration directory "${inputsConfigFilesDirectoryPath}" doesn't exist. Ignoring it.`, true);
       }

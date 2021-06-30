@@ -54,6 +54,7 @@
 - Each Input writes its own `state.xxx.json` after each succesfull Collection Cycle
 
 ### Configuration
+- Active (👈 Compulsory. If not provided or if false, the input is ignored)
 - UID (👈 Compulsory. If not provided, a new one will be given at each run time, messing up with State persistance)
 - Base directory path (👈 Compulsory, must be a directory)
 - Inclusions (👈 Compulsory, if not provided, `*` will be used, and all files within the directory and sub-directories -if depth is not `0`- will be read)

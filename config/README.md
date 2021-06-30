@@ -98,6 +98,7 @@ All the other fields are optional (⚫)
 
 | | Field | Type | Description |
 |-|-------|------|-------------|
+|🟠| `active` | boolean | If true, the Log Source will be collected. Otherwise, the configuration will be ignored |
 |🟠| `log_source_type` | string | One of the supported log source type: `flatFile` or `syslog`. |
 |🟠| `uid` | string | UID of the Log Source / data stream. If none provided, one will be generated. |
 |⚫| `name` | string | Optional user friendly name for the Log Source / data stream. |
@@ -124,6 +125,7 @@ __Example:__
 ```json
 [
   {
+    "active": true,
     "log_source_type": "flatFile",
     "uid": "ef480e69-5c1b-4d8f-8144-7d51c765f1ee",
     "name": "Firewalld logs",
@@ -147,6 +149,7 @@ __Example:__
     "printToConsole": false
   },
   {
+    "active": true,
     "log_source_type": "flatFile",
     "uid": "b2d5912d-e842-4689-b7fe-1c6a452d1002",
     "name": "System wide Messages",
@@ -194,6 +197,7 @@ __Examples:__
 - `{jsBeatRoot}/config/inputs.d/firewalld.json`
 ```json
 {
+  "active": true,
   "log_source_type": "flatFile",
   "uid": "d6a5a53f-51d7-4324-8920-377e07f754ed",
   "name": "Firewalld logs",
@@ -221,6 +225,7 @@ __Examples:__
 - `{jsBeatRoot}/config/inputs.d/messages.json`
 ```json
 {
+  "active": true,
   "log_source_type": "flatFile",
   "uid": "f114e094-4a21-414c-bcd6-7456a5e1e75a",
   "name": "System wide Messages",
