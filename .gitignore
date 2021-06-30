@@ -3,3 +3,5 @@ node_modules/*
 *.p12
 states/*
 dist/bin/main.js
+jsBeat-*.tgz
+jsBeat-*.tgz.sha256
