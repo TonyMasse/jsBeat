@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs-extra');
 
 const levelToInt = {
   'Debug': 1,
@@ -6,7 +6,8 @@ const levelToInt = {
   'Information': 3,
   'Warning': 4,
   'Error': 5,
-  'Critical': 6
+  'Critical': 6,
+  'Silent': 7
 };
 
 const intToLevel = {
@@ -15,11 +16,12 @@ const intToLevel = {
   3: 'Information',
   4: 'Warning',
   5: 'Error',
-  6: 'Critical'
+  6: 'Critical',
+  7: 'Silent'
 };
 
 const minLevelInt = 1;
-const maxLevelInt = 6;
+const maxLevelInt = 7;
 const defaultLevelInt = 2; // Verbose
 const defaultLevel = levelToInt[defaultLevelInt];
 
@@ -56,6 +58,7 @@ function openStream(logFilePath) {
     }
   }
   try {
+    fs.createFileSync(logFilePath);
     logStream = fs.createWriteStream(logFilePath, { flags: 'a+' });
   } catch (err) {
     //
@@ -67,13 +70,14 @@ function logToSystem (severity, message, copyToConsole = (false || process.env.l
   try {
     if (severity !== undefined && severity.length && message !== undefined && message.length) {
       const outSeverityInt = getLevelToInt(severity);
-      if (outSeverityInt >= (process.env.logLevel !== undefined && process.env.logLevel >= minLevelInt && process.env.logLevel <= maxLevelInt ? process.env.logLevel : defaultLevelInt)) {
+      const envLogLevel = Number(process.env.logLevel)
+      if (outSeverityInt >= (process.env.logLevel !== undefined && envLogLevel >= minLevelInt && envLogLevel <= maxLevelInt ? envLogLevel : defaultLevelInt)) {
         const outSeverity = getIntToLevel(outSeverityInt).toUpperCase();
         const outTimestamp = new Date().toISOString();
 
         // Send to Console
         if (copyToConsole === true || copyToConsole === 'true') {
-          console.log(outTimestamp, '|', outSeverity, '|', message);
+          console.error(outTimestamp, '|', outSeverity, '|', message);
         }
 
         // Send to system logs

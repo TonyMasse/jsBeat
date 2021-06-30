@@ -28,7 +28,7 @@ Overal configuraion of jsBeat.
 | lumberjackConfigPath | `{jsBeatRoot}/config/lumberjack.json` | Parameters for the Lumberjack protocol. Defines how to connect to the Open Collector. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. | `--lumberjackConfigPath` |
 | decompressionTemporaryRootPath | `/tmp/jsBeat/decompressedFiles` | Temporary directory inside of which new directories will be created if needed to temporarily store decompressed files, while they get processed. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. | `--decompressionTemporaryRootPath` |
 | logFilePath | `/var/log/jsBeat` | Log file of jsBeat. Any occurrence of `{jsBeatRoot}` in this path will be replaced by the value of `jsBeatRoot`. | `--logFilePath` |
-| logLevel | `information` | Level of logging details. Possible values: `critical`, `error`, `warning`, `information`, `verbose`, `debug` | `--logLevel` |
+| logLevel | `information` | Level of logging details. Possible values: `silent`, `critical`, `error`, `warning`, `information`, `verbose`, `debug` | `--logLevel` |
 
 __Example:__
 ```json
@@ -116,7 +116,7 @@ All the other fields are optional (⚫)
 |⚫| `frequencyInSeconds` | number | Collect cycle frequency. Default to 30 seconds if not provided or below 0. |
 |⚫| `autoStart` | boolean | If false, it will only create the object and wait for start() to be called. Otherwise (default) it will try to start capturing the data immediately.
 |⚫| `printToConsole` | boolean | If true, it will print out to the Console, as well as to the Open Collector. |
-|⚫| `sendToOpenCollector` | boolean | If true, will push to Open Collector via Lumberjack. |
+|⚫| `sendToOpenCollector` | boolean | If true, will push to Open Collector via Lumberjack. Default to true if not specified |
 |🔵| `deviceType` | string | The name of the Device Type, to pass onto the Open Collector Pipeline. |
 |🔵| `filterHelpers` | object | A set of flags/strings/objects to help the JQ filter of the Open Collector Pipeline to trigger on. |
 
