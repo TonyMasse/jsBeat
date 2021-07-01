@@ -410,7 +410,7 @@ function collectMessagesFromFile (fileFullPath, fromByte, toByte) {
       this.statistics.filesCollected++;
       if (this.config.compressionType && this.config.compressionType.length) {
         // Handle decompression
-        logToSystem('Verbose', '🚀 - WARNING : Compression is not yet implemented.');
+        logToSystem('Warning', '🚀 - Compression is not yet implemented.');
       }
 
       try {
@@ -484,7 +484,7 @@ function collectMessagesFromFile (fileFullPath, fromByte, toByte) {
               messageMatches = tempLogMessageSelectionRegex.exec(bufferAsString);
             }
           } catch (err) {
-            logToSystem('Warning', '🚀 - 🟠 WARNING - Message parsing - ' + err.message);
+            logToSystem('Warning', '🚀 - 🟠 - Message parsing - ' + err.message);
           } finally {
             //
           }
@@ -495,9 +495,9 @@ function collectMessagesFromFile (fileFullPath, fromByte, toByte) {
           messagePushedToOpenCollectorCountTotal += messagePushedToOpenCollectorCount;
         }
         if (infiniteLoopBreaker <= 0) {
-          console.log('🚀 - 🟠 WARNING: Hitting the buffer on the file read loop...');
+          logToSystem('Warning','🚀 - 🟠 - Hitting the buffer on the file read loop...');
         }
-        console.log('🚀 - 🔢🏁 - Stats // Bytes read: ' + bytesReadTotal + ' // Messages parsed: ' + messageMathesCountTotal + ' // Messages pushed to Open Collector: ' + messagePushedToOpenCollectorCountTotal);
+        logToSystem('Verbose','🚀 - 🔢🏁 - Stats // Bytes read: ' + bytesReadTotal + ' // Messages parsed: ' + messageMathesCountTotal + ' // Messages pushed to Open Collector: ' + messagePushedToOpenCollectorCountTotal);
       } catch (err) {
         logToSystem('Error', err.message);
       } finally {
