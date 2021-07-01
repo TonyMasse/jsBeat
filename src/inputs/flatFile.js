@@ -263,7 +263,6 @@ function collectionCycle () {
     try {
       this.collectionCycleStillOngoing = true;
       this.currentCollectionCycleStartedAt = Date.now();
-      // console.log('🔎 - Start Collection Cycle!');
       logToSystem('Verbose', '🔎 - Start Collection Cycle!');
       // Let's get cracking!
       this.statistics.directoriesScanned = 0;
@@ -310,8 +309,6 @@ function collectionCycle () {
 
 function crawl (directory, depth) {
   try {
-    // console.log(String('').padStart(depth, ' ') + '🦔 - crawler entering directory: (' + depth + ') ' + directory);
-
     // Bail out if sent to a phony directory
     if (!fs.existsSync(directory)) {
       return;
@@ -348,7 +345,7 @@ function crawl (directory, depth) {
               if (String(entry).match(this.config.inclusionFilterRegex)) {
                 // And if it doesn't our exclusion Regex
                 if (!this.config.exclusionFilterRegex || (this.config.exclusionFilterRegex && !String(entry).match(this.config.exclusionFilterRegex))) {
-                  // logToSystem('Verbose', '🦔 - processing: ' + entry);
+                  logToSystem('Debug', '🦔 - processing: ' + entry);
                   this.statistics.filesDetected++;
                   const previousStats = this.state.positions.get(entryFullPath)
                   if (previousStats) {
@@ -382,7 +379,8 @@ function crawl (directory, depth) {
                 }
               }
             } else {
-              // logToSystem('Verbose', '🦔 - 👴 - File is too old. Skipping. (' + entryFullPath + ')');
+              // File is too old. Skipping.
+              logToSystem('Debug', '🦔 - 👴 - File is too old. Skipping. (' + entryFullPath + ')');
             }
           }
 
@@ -461,7 +459,6 @@ function collectMessagesFromFile (fileFullPath, fromByte, toByte) {
             let messageMatches = tempLogMessageSelectionRegex.exec(bufferAsString);
             while (messageMatches) {
               messageMathesCount++;
-              // console.log('🚀 >>> ', messageMatches[1]);
 
               // Push the message out
               if (this.config.printToConsole === true) {
@@ -485,8 +482,6 @@ function collectMessagesFromFile (fileFullPath, fromByte, toByte) {
             }
           } catch (err) {
             logToSystem('Warning', '🚀 - 🟠 - Message parsing - ' + err.message);
-          } finally {
-            //
           }
 
           // And finally update the counters
@@ -514,6 +509,7 @@ function collectMessagesFromFile (fileFullPath, fromByte, toByte) {
   }
 }
 
+// Load state (positions) for this Log Source from the state folder on disk
 function loadState () {
   try {
     const stateArray = fs.readFileSync(
@@ -530,6 +526,7 @@ function loadState () {
   }
 }
 
+// Save state (positions) for this Log Source to the state folder on disk
 function persistState () {
   try {
     fs.ensureFileSync(this.state.fullStateFilePath);
@@ -546,6 +543,7 @@ function persistState () {
   }
 }
 
+// Clean up state (positions) for this Log Source by pruning old / unnecessary entries
 function pruneState () {
   if (this.stillPruningState) {
     logToSystem('Verbose', '🌳 - Still Pruning State. Doing nothing. (Been pruning for ' + ((Date.now() - this.currentPruningStateStartedAt) / 1000) + ' seconds)');
