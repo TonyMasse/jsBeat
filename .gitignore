@@ -2,6 +2,6 @@ node_modules/*
 *.pem
 *.p12
 states/*
-dist/bin/main.js
-jsBeat-*.tgz
-jsBeat-*.tgz.sha256
+dist/jsBeat/bin/main.js
+dist/jsBeat-*.tgz
+dist/jsBeat-*.tgz.sha256
