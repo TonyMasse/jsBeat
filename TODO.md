@@ -42,7 +42,7 @@
   - [ ] UDP
   - [ ] TCP
     - [ ] Secure Syslog
-- [ ] Provide SHA256 checksum with wach Release
+- [x] Provide SHA256 checksum with each Release
 - [x] Add `Active` parameter to the Input config files, and ignore any Input where `Active` is not `true`
 
 ## TO FIX
