@@ -46,7 +46,7 @@
 - [x] Add `Active` parameter to the Input config files, and ignore any Input where `Active` is not `true`
 
 ## TO FIX
-:hole:
+- [x] Console output not sending JSON with .message
 
 ## TO TEST
 - [x] Use General JSON configuration file to store

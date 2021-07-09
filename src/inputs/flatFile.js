@@ -462,7 +462,7 @@ function collectMessagesFromFile (fileFullPath, fromByte, toByte) {
 
               // Push the message out
               if (this.config.printToConsole === true) {
-                console.log(messageMatches[1]);
+                console.log(JSON.stringify({ message: messageMatches[1]}));
               }
               if (this.config.sendToOpenCollector === true) {
                 try {
