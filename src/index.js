@@ -7,6 +7,13 @@ const { getLevelToInt, logToSystem } = require('./systemLogging');
 
 // Load the Configuration readers
 const { jsBeatRoot, commandArgs, readMainConfig, readInputsConfig } = require('./configReaders');
+const { name, version } = require('../package.json');
+
+// Print out version and quit, if requested with --version or -v
+if (commandArgs && (commandArgs.version || commandArgs.v)) {
+  console.log(name, version);
+  process.exit(0);
+}
 
 // Load the main configuration (typically config/jsBeat.json)
 const mainConfig = readMainConfig();

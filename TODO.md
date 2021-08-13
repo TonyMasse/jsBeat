@@ -44,6 +44,7 @@
     - [ ] Secure Syslog
 - [x] Provide SHA256 checksum with each Release
 - [x] Add `Active` parameter to the Input config files, and ignore any Input where `Active` is not `true`
+- [x] Output the version number if run with parameter `--version` or `-v`
 
 ## TO FIX
 - [x] Console output not sending JSON with .message
