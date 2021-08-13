@@ -8,13 +8,13 @@
 `npm run dev`
 
 ### Build
+- Update the version number in the `/package.json` file, in the form `x.y.z`. Like `1.0.0`, or `5.4.3`.
+- run:
 ```bash
 npm run build
-mv dist jsbeat-x.y.z
-tar cvfz jsbeat-x.y.z/* jsbeat-x.y.z.tgz 
-rm -rf jsbeat-x.y.z/
+ls -l dist
 ```
-*(where `x.y.z` is the version number, like `1.0.0`, or `5.4.3`)*
+*(The produced files will contain the version number.)*
 
 ### Check the TODO list
 👉 [TODO](../TODO.md)
