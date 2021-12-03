@@ -4,6 +4,9 @@ const os = require('os');
 // Load the System Logging functions
 const { logToSystem } = require('../systemLogging');
 
+// Get the version number from package.json
+import { name, version } from '../../package.json'
+
 // Get Lumberjack config
 const fs = require('fs');
 const path = require('path');
@@ -38,8 +41,8 @@ function logMessage (message, deviceType, filterHelpers, sendExtraHostInfo) {
       {
         '@timestamp': new Date(),
         '@metadata': {
-          beat: process.env.npm_package_name,
-          version: process.env.npm_package_version,
+          beat: (process.env.npm_package_name || name || 'jsBeat'),
+          version: (process.env.npm_package_version || version),
           device_type: deviceType,
           filter_helpers: filterHelpers
         },
