@@ -5,7 +5,7 @@ const os = require('os');
 const { logToSystem } = require('../systemLogging');
 
 // Get the version number from package.json
-import { name, version } from '../../package.json'
+const { name, version } = require('../../package.json')
 
 // Get Lumberjack config
 const fs = require('fs');
