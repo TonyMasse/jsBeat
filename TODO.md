@@ -48,6 +48,7 @@
 
 ## TO FIX
 - [x] Console output not sending JSON with .message
+- [x] `@metadata.beat` and `.version` are empty when running in Production
 
 ## TO TEST
 - [x] Use General JSON configuration file to store
