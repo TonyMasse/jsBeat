@@ -1,12 +1,12 @@
 {
   "name": "jsbeat",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "A light, Javascript based, Beat to collect data for the Open Collector",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon --ignore states/ --ignore dist/ src/index.js",
-    "build": "webpack ; echo -e \"\" ; cd dist ; mv jsBeat jsBeat-1.1.4 ; tar cfvz jsBeat-1.1.4.tgz jsBeat-1.1.4/* ; echo -e \"\" ; mv jsBeat-1.1.4 jsBeat ; sha256sum jsBeat-1.1.4.tgz > jsBeat-1.1.4.tgz.sha256 ; cat jsBeat-1.1.4.tgz.sha256 ; echo -e \"\" ; cd ..",
+    "build": "webpack ; echo -e \"\" ; cd dist ; mv jsBeat jsBeat-1.1.5 ; tar cfvz jsBeat-1.1.5.tgz jsBeat-1.1.5/* ; echo -e \"\" ; mv jsBeat-1.1.5 jsBeat ; sha256sum jsBeat-1.1.5.tgz > jsBeat-1.1.5.tgz.sha256 ; cat jsBeat-1.1.5.tgz.sha256 ; echo -e \"\" ; cd ..",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Tony Masse",
