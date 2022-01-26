@@ -36,7 +36,7 @@ function logMessage (message, deviceType, filterHelpers, sendExtraHostInfo) {
   // filterHelpers is an optional Object used by the Open Collector filter to include or exclude the message (for example: { filter_abc: true, filter_xyz: false } )
   // sendExtraHostInfo is an optional Boolean used to decide if we should send extra info about the Host / OS as well
 
-  if (message !== undefined) {
+  if (client && message !== undefined) {
     client.log(
       {
         '@timestamp': new Date(),
