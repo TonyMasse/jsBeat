@@ -34,6 +34,13 @@ const { logMessage } = require('./outputs/logMessage');
 const { FlatFileReaderTail } = require('./inputs/flatFileTail');
 const { FlatFileReader } = require('./inputs/flatFile');
 
+// Load troubleshooting helpers
+const { enableCpuProfileDump, enableHeapProfileDump } = require('./troubleshootingUtils');
+
+// Enable CPU and Heap dump
+enableCpuProfileDump(); // Using default SIGUSR1 and profileRecordTime
+enableHeapProfileDump(); // Using default SIGUSR2 and profileRecordTime
+
 // Log that we are starting
 logToSystem('Information', 'Beat Started', true);
 logMessage(
